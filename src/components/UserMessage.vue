@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="message">
     <v-card-text>
       {{message}}
     </v-card-text>
@@ -15,6 +15,7 @@ defineProps({
   profil: {
     type: String,
     required: false,
+    default: 'U'
   },
   message: {
     type: String,
@@ -24,5 +25,11 @@ defineProps({
 </script>
 
 <style scoped lang="sass">
+  .message
+    margin: 5px
+
+  .profil
+    margin-bottom: 0
+
 
 </style>
