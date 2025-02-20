@@ -33,7 +33,7 @@ const items = ref([
     title: 'Qui sommes-nous ?',
     subtitle: 'Gestion des événements et champs de formulaire',
     prependIcon: 'mdi-form-select', // Icône pertinente pour un formulaire
-    to: '/who-i-am',
+    to: '/Exemple1',
     created: '2023-09-15',
     updated: '2023-10-10',
   },
