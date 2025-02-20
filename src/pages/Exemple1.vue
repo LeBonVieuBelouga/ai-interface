@@ -23,6 +23,8 @@
     auto-grow
     rows="1"
     no-resize
+    clearable
+    label="Nouveau message"
     @click:append-inner="onClick"
   ></v-textarea>
 </template>
@@ -53,5 +55,7 @@ const profil = ref("FF")
 </script>
 
 <style scoped lang="sass">
-
+  v-textarea
+    margin-top: 100px
+    padding: 100px
 </style>

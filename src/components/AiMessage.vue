@@ -1,7 +1,7 @@
 <template>
-  <div class="ma-4">
+  <div class="ma-4 message-container">
     <v-card
-      class="ia-message border-radius"
+      class="message-card"
       variant="outlined"
       :subtitle="message.time"
     >
@@ -9,7 +9,7 @@
         {{ message.text }}
       </v-card-text>
     </v-card>
-    <v-avatar color="grey lighten-4">
+    <v-avatar color="grey lighten-4 avatar">
       <v-icon dark>
         mdi-robot
       </v-icon>
@@ -27,8 +27,18 @@ defineProps({
 </script>
 
 <style scoped lang="sass">
-  .v-avatar
-    margin-top: 15px
-  .v-card
-    margin-top: 1.5em
+.message-container
+  position: relative
+  max-width: 70%
+  padding: 20px
+
+.message-card
+  border-radius: 15px 15px 15px 0px
+
+.avatar
+  position: absolute
+  bottom: -20px
+  left: -20px
+  width: 40px
+  height: 40px
 </style>
