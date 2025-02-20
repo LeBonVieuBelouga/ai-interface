@@ -20,7 +20,7 @@
 <script setup>
 defineProps({
   message: {
-    type: [],
+    type: Object,
     required: true,
   },
 });
@@ -29,5 +29,6 @@ defineProps({
 <style scoped lang="sass">
   .v-avatar
     margin-top: 15px
-
+  .v-card
+    margin-top: 1.5em
 </style>
