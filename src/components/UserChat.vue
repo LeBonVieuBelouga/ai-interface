@@ -14,7 +14,7 @@
   </div>
 
   <v-textarea
-    class="v-bottom-navigation ma-5 position-sticky"
+    class="v-bottom-navigation ma-10 position-sticky"
     :loading="loading"
     height="80"
     density="compact"
@@ -25,6 +25,7 @@
     no-resize
     clearable
     label="Nouveau message"
+    append-inner-icon="mdi-magnify"
     @click:append-inner="onClick"
   ></v-textarea>
 </template>
@@ -52,6 +53,18 @@ const profil = ref("FF")
 </script>
 
 <style scoped lang="sass">
+.messages-container
+  margin: 30px
+.user-chat
+  margin-right: 20px
+  margin-left: 20px
+  padding: 15px
+
+.message
+  margin-bottom: 15px
+  padding: 10px
+  border-radius: 8px
+
 v-textarea
   margin-top: 100px
   padding: 100px
