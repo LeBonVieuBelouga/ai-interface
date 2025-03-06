@@ -5,7 +5,7 @@
       class="message-card"
     >
       <v-card-text>
-        {{ message.text }}
+        {{ message.content }}
       </v-card-text>
     </v-card>
     <v-avatar color="red" class="avatar"> <!-- Ajout de la classe avatar -->

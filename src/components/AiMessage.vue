@@ -6,7 +6,7 @@
       :subtitle="message.time"
     >
       <v-card-text>
-        {{ message.text }}
+        {{ message.content }}
       </v-card-text>
     </v-card>
     <v-avatar color="grey lighten-4 avatar">

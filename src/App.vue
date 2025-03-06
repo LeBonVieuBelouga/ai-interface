@@ -1,27 +1,43 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" class="pa-0">
-      <v-list item-props :items="items" nav />
+      <v-list>
+        <v-list-item
+          v-for="chat in UserChats"
+          :key="chat.id"
+          :value="chat.id"
+          @click="selectChat(chat)"
+        >
+          <v-list-item-title>{{ chat.title }}</v-list-item-title>
+          <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
-
     <v-app-bar border="b" class="ps-4" flat>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-app-bar-title>Local chat bot</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
-      <router-view/>
+      <router-view v-if="!currChat"/>
+      <UserChat
+        v-else
+        :chat="currChat"
+      />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import UserChat from "@/components/UserChat.vue";
 
 const drawer = ref(true)
+const currChat = ref(null)
 
-const items = ref([
+const UserChats = ref([
   {
+    id:"fdfddf-erert",
     title: 'Comment discuter ?',
     subtitle: 'Rendu déclaratif et liaisons d’attributs',
     prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
@@ -30,76 +46,100 @@ const items = ref([
     updated: '2023-10-05', // Date de mise à jour
   },
   {
+    id:"TU23GC-erert",
     title: 'Qui sommes-nous ?',
     subtitle: 'Gestion des événements et champs de formulaire',
     prependIcon: 'mdi-form-select', // Icône pertinente pour un formulaire
     to: '/Exemple1',
     created: '2023-09-15',
     updated: '2023-10-10',
+    messages :[
+      {
+        id: "0001",
+        author: "user",
+        time: "07:30 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed diam volu sit amet."
+      },
+      {
+        id: "0002",
+        author: "ia",
+        time: "07:31 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat,st Lorem ipsum dolor sit amet."
+      },
+      {
+        id: "0003",
+        author: "user",
+        time: "07:32 07/09/2025",
+        content: "Lorem ipsum dolor sit a nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed Lorem ipsum dolor sit amet."
+      },
+      {
+        id: "0004",
+        author: "ia",
+        time: "07:33 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+          " no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      }
+    ]
   },
   {
-    title: 'Angular',
-    subtitle: 'A quoi sert Angular ?',
-    prependIcon: 'mdi-format-list-bulleted', // Icône pour une liste
-    to: '/angular-use',
-    created: '2023-08-20',
-    updated: '2023-09-25',
-  },
-  {
-    title: 'React vs Vue',
-    subtitle: 'Comparaison des frameworks front-end',
-    prependIcon: 'mdi-code-tags', // Icône pour du code
-    to: '/frameworks-comparison',
-    created: '2023-07-10',
-    updated: '2023-09-30',
-  },
-  {
-    title: 'IA et Machine Learning',
-    subtitle: 'Introduction aux concepts de l\'IA',
-    prependIcon: 'mdi-brain', // Icône pour l'intelligence artificielle
-    to: '/ai-intro',
-    created: '2023-06-05',
-    updated: '2023-08-15',
-  },
-  {
-    title: 'Gestion de projet',
-    subtitle: 'Méthodologies Agile et Scrum',
-    prependIcon: 'mdi-chart-gantt', // Icône pour la gestion de projet
-    to: '/project-management',
-    created: '2023-05-12',
-    updated: '2023-07-20',
-  },
-  {
-    title: 'Cybersécurité',
-    subtitle: 'Bonnes pratiques pour protéger vos données',
-    prependIcon: 'mdi-shield-lock', // Icône pour la sécurité
-    to: '/cybersecurity',
-    created: '2023-04-18',
-    updated: '2023-06-22',
-  },
-  {
-    title: 'Développement mobile',
-    subtitle: 'Introduction à Flutter et React Native',
-    prependIcon: 'mdi-cellphone', // Icône pour le développement mobile
-    to: '/mobile-dev',
-    created: '2023-03-25',
-    updated: '2023-05-30',
-  },
-  {
-    title: 'Data Science',
-    subtitle: 'Analyse de données avec Python et Pandas',
-    prependIcon: 'mdi-chart-bar', // Icône pour l'analyse de données
-    to: '/data-science',
-    created: '2023-02-10',
-    updated: '2023-04-15',
-  },
-  {
-    title: 'Blockchain',
-    subtitle: 'Comprendre les bases de la technologie blockchain',
-    prependIcon: 'mdi-link-variant', // Icône pour la blockchain
-    to: '/blockchain-basics',
-    created: '2023-01-05',
-    updated: '2023-03-12',
+    id:"TU23GC-bds4",
+    title: 'Qui ça qui ça ?',
+    subtitle: 'Gestion des événements et champs de formulaire',
+    prependIcon: 'mdi-form-select', // Icône pertinente pour un formulaire
+    created: '2023-09-15',
+    updated: '2023-10-10',
+    messages :[
+      {
+        id: "0001",
+        author: "user",
+        time: "07:30 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
+          "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
+          "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+          "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+          " no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      },
+      {
+        id: "0002",
+        author: "ia",
+        time: "07:31 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
+          "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
+          "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+          "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+          " no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      },
+      {
+        id: "0003",
+        author: "user",
+        time: "07:32 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
+          "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
+          "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+          "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+          " no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      },
+      {
+        id: "0004",
+        author: "ia",
+        time: "07:33 07/09/2025",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
+          " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
+          "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
+          "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+          "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+          " no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      }
+    ]
   },
 ]);
+const selectChat = (chat) => {
+  currChat.value = chat; // Met à jour le chat sélectionné
+};
 </script>
