@@ -63,7 +63,7 @@ const UserChats = ref([
       },
       {
         id: "0002",
-        author: "ia",
+        author: "ai",
         time: "07:31 07/09/2025",
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat,st Lorem ipsum dolor sit amet."
@@ -77,7 +77,7 @@ const UserChats = ref([
       },
       {
         id: "0004",
-        author: "ia",
+        author: "ai",
         time: "07:33 07/09/2025",
         content: "Lorem ipsum dolor sit amet, consetetusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
           " no sea takimata sanctus est Lorem ipsum dolor sit amet."
@@ -105,7 +105,7 @@ const UserChats = ref([
       },
       {
         id: "0002",
-        author: "ia",
+        author: "ai",
         time: "07:31 07/09/2025",
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
@@ -127,7 +127,7 @@ const UserChats = ref([
       },
       {
         id: "0004",
-        author: "ia",
+        author: "ai",
         time: "07:33 07/09/2025",
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
