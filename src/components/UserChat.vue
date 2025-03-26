@@ -1,7 +1,13 @@
 <template>
-  <h1 class="ma-5"> {{ chat.title }}</h1>
+  <h1 class="ma-5">
+    {{ chat.title }}
+  </h1>
 
-  <div class="messages-container" v-for="(message) in mergedMessages" :key="message.id">
+  <div
+    v-for="(message) in mergedMessages"
+    :key="message.id"
+    class="messages-container"
+  >
     <UserMessage
       v-if="message.author === 'user'"
       :profil="profil"
@@ -27,7 +33,7 @@
     label="Nouveau message"
     append-inner-icon="mdi-magnify"
     @click:append-inner="onClick"
-  ></v-textarea>
+  />
 </template>
 <script setup>
 
@@ -46,7 +52,6 @@ const props = defineProps({
 const mergedMessages = computed(() => {
   return [...props.chat.messages]
     .sort((a, b) => a.timestamp - b.timestamp)
-    .map((msg, index) => ({ ...msg, id: index })) // ID unique recommandé
 })
 
 const profil = ref("FF")

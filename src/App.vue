@@ -1,7 +1,22 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" class="pa-0">
+    <v-navigation-drawer
+      v-model="drawer"
+      class="pa-0"
+    >
       <v-list>
+        <v-list-item
+          prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
+          subtitle="john@google.com"
+          title="John Leider"
+        />
+      </v-list>
+      <v-divider />
+      <v-list
+        :lines="false"
+        density="compact"
+        nav
+      >
         <v-list-item
           v-for="chat in UserChats"
           :key="chat.id"
@@ -10,16 +25,28 @@
         >
           <v-list-item-title>{{ chat.title }}</v-list-item-title>
           <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
+          <template
+            #prepend
+          >
+            <v-icon
+              color="info"
+              icon="mdi-chevron-right"
+            />
+          </template>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar border="b" class="ps-4" flat>
+    <v-app-bar
+      border="b"
+      class="ps-4"
+      flat
+    >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-app-bar-title>Local chat bot</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
-      <router-view v-if="!currChat"/>
+      <router-view v-if="!currChat" />
       <UserChat
         v-else
         :chat="currChat"
