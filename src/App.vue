@@ -21,16 +21,18 @@
             density="compact"
             icon="mdi-magnify"
             style="margin-right: 10px"
+            @click="isOpenOverlay = !isOpenOverlay"
           />
           <v-overlay
-            activator="#search-btn"
+            v-model="isOpenOverlay"
+            class="align-center justify-center"
             location-strategy="connected"
             scroll-strategy="block"
           >
             <v-card
               color="surface-light"
               class="pa-2"
-              
+
               max-height="400px"
             >
               <v-card-text class="pa-4">
@@ -50,7 +52,7 @@
                   item-height="48"
                   item-width="200"
                   width="100%"
-                  class="pa-5"
+                  class="pa-2"
                 >
                   <template #default="{ item }">
                     <v-list
@@ -62,13 +64,13 @@
                         :value="item.id"
                         :title="item.title"
                         :subtitle="item.subtitle"
-                        @click="selectChat(item)"
                       >
                         <template #append>
                           <v-btn
                             icon="mdi-chevron-right"
                             size="x-small"
                             variant="tonal"
+                            @click="selectChat(item), isOpenOverlay=false"
                           />
                         </template>
                       </v-list-item>
@@ -135,7 +137,7 @@ import UserChat from "@/components/UserChat.vue";
 
 const drawer = ref(true)
 const currChat = ref(null)
-
+const isOpenOverlay = ref(false)
 const UserChats = ref([
   {
     id:"fdfddf-erert",
