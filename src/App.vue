@@ -1,124 +1,17 @@
 <template>
   <v-app>
-    <v-navigation-drawer
+    <SideRMenu
       v-model="drawer"
-      class="pa-0"
-    >
-      <v-list>
-        <v-list-item
-          prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-          subtitle="john@google.com"
-          title="John Leider"
-        />
-        <v-list-item>
-          <v-btn
-            density="compact"
-            icon="mdi-cog"
-            style="margin-right: 10px"
-          />
-          <v-btn
-            id="search-btn"
-            density="compact"
-            icon="mdi-magnify"
-            style="margin-right: 10px"
-            @click="isOpenOverlay = !isOpenOverlay"
-          />
-          <v-overlay
-            v-model="isOpenOverlay"
-            class="align-center justify-center"
-            location-strategy="connected"
-            scroll-strategy="block"
-          >
-            <v-card
-              color="surface-light"
-              class="pa-2"
-
-              max-height="400px"
-            >
-              <v-card-text class="pa-4">
-                <v-text-field
-                  :loading="loading"
-                  append-inner-icon="mdi-magnify"
-                  density="comfortable"
-                  label="Rechercher un chat"
-                  variant="solo"
-                  hide-details
-                  single-line
-                  @click:append-inner="onClick"
-                />
-                <v-virtual-scroll
-                  :items="UserChats"
-                  height="320"
-                  item-height="48"
-                  item-width="200"
-                  width="100%"
-                  class="pa-2"
-                >
-                  <template #default="{ item }">
-                    <v-list
-                      density="compact"
-                      nav
-                    >
-                      <v-list-item
-                        :key="item.id"
-                        :value="item.id"
-                        :title="item.title"
-                        :subtitle="item.subtitle"
-                      >
-                        <template #append>
-                          <v-btn
-                            icon="mdi-chevron-right"
-                            size="x-small"
-                            variant="tonal"
-                            @click="selectChat(item), isOpenOverlay=false"
-                          />
-                        </template>
-                      </v-list-item>
-                    </v-list>
-                  </template>
-                </v-virtual-scroll>
-              </v-card-text>
-            </v-card>
-          </v-overlay>
-          <v-btn
-            density="compact"
-            icon="mdi-pencil-plus"
-            style="margin-right: 10px"
-          />
-        </v-list-item>
-      </v-list>
-      <v-divider />
-      <v-list
-        :lines="false"
-        density="compact"
-        nav
-      >
-        <v-list-item
-          v-for="chat in UserChats"
-          :key="chat.id"
-          :value="chat.id"
-          @click="selectChat(chat)"
-        >
-          <v-list-item-title>{{ chat.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
-          <template
-            #prepend
-          >
-            <v-icon
-              color="info"
-              icon="mdi-chevron-right"
-            />
-          </template>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+      :user-chats="userConversations"
+      :user-data="userProfil"
+    />
     <v-app-bar
       border="b"
       class="ps-4"
       flat
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-app-bar-title>Local chat bot</v-app-bar-title>
+      <v-app-bar-title>Deep Sick🤒🤖</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -134,11 +27,18 @@
 <script setup>
 import { ref } from 'vue'
 import UserChat from "@/components/UserChat.vue";
+import SideRMenu from "@/components/SideRMenu.vue";
 
 const drawer = ref(true)
 const currChat = ref(null)
-const isOpenOverlay = ref(false)
-const UserChats = ref([
+const userProfil =ref({
+  id:"000-0001",
+  username:"johan.tomy",
+  email:"john@tomy.ch",
+  nickname:"Johan Tomy",
+  avatar:"https://cdn.vuetifyjs.com/images/john.png",
+})
+const userConversations = ref([
   {
     id:"fdfddf-erert",
     title: 'Comment discuter ?',
