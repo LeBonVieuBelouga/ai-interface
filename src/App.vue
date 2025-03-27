@@ -11,7 +11,26 @@
       flat
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-app-bar-title>Deep Sick🤒🤖</v-app-bar-title>
+      <v-app-bar-title>
+        <v-btn
+          color="primary"
+        >
+          {{ AISelected }}
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in aiTypes"
+                :key="index"
+                :value="index"
+              >
+                <v-list-item-title @click=" AISelected = item.name">
+                  {{ item.name }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+      </v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -29,8 +48,36 @@ import { ref } from 'vue'
 import UserChat from "@/components/UserChat.vue";
 import SideRMenu from "@/components/SideRMenu.vue";
 
+const AISelected = ref( "Deep Sick🤒🤖")
 const drawer = ref(true)
 const currChat = ref(null)
+const aiTypes = ref([
+  {
+    id:"EEE",
+    name:"Deep Sick🤒🤖",
+    isEnable: false
+  },
+  {
+    id:"EE4E",
+    name:"Deep Seek 8Gb",
+    isEnable: true
+  },
+  {
+    id:"EE5E",
+    name:"Llama 3",
+    isEnable: false
+  },
+  {
+    id:"EE6E",
+    name:"Mixtral 8x7B",
+    isEnable: true
+  },
+  {
+    id:"EE7E",
+    name:"Gemma",
+    isEnable: false
+  },
+])
 const userProfil =ref({
   id:"000-0001",
   username:"johan.tomy",
