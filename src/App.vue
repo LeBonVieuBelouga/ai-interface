@@ -16,6 +16,11 @@
           color="primary"
         >
           {{ AISelected }}
+          <v-icon
+            icon="mdi-chevron-down"
+            size="large"
+            end
+          />
           <v-menu activator="parent">
             <v-list>
               <v-list-item
