@@ -1,39 +1,45 @@
 <template>
-  <h1 class="ma-5">
-    {{ chat.title }}
-  </h1>
-
-  <div
-    v-for="(message) in mergedMessages"
-    :key="message.id"
-    class="messages-container"
-  >
-    <UserMessage
-      v-if="message.author === 'user'"
-      :profil="profil"
-      :message="message"
-    />
-    <AiMessage
-      v-else-if="message.author === 'ai'"
-      :message="message"
-    />
+  <div class=" position-relative rounded-lg">
+    <div class="position-relative py-3 ps-3">
+      <div class="overflow-y-auto pe-3">
+        <div
+          v-for="(message) in mergedMessages"
+          :key="message.id"
+          class="rounded-lg pa-3 mt-2"
+        >
+          <UserMessage
+            v-if="message.author === 'user'"
+            :profil="profil"
+            :message="message"
+          />
+          <AiMessage
+            v-else-if="message.author === 'ai'"
+            :message="message"
+          />
+        </div>
+      </div>
+    </div>
   </div>
-
-  <v-textarea
-    class="v-bottom-navigation ma-10 position-sticky"
-    :loading="loading"
-    height="80"
-    density="compact"
-    variant="solo"
-    hide-details
-    auto-grow
-    rows="1"
-    no-resize
-    clearable
-    label="Nouveau message"
-    append-inner-icon="mdi-magnify"
-    @click:append-inner="onClick"
-  />
+  <div class=" position-sticky bottom-0 bg-background">
+    <v-textarea
+      class="ma-3"
+      :loading="loading"
+      height="80"
+      density="comfortable"
+      variant="solo"
+      hide-details
+      auto-grow
+      rows="1"
+      no-resize
+      clearable
+      label="Envoyer un nouveau message"
+      append-inner-icon="mdi-send"
+      @click:append-inner="onClick"
+    />
+    <div class="text-center pa-1 text-caption text-secondary">
+      Développer par Léo Küttel & Johan Sàrl
+    </div>
+  </div>
 </template>
 <script setup>
 
@@ -58,8 +64,6 @@ const profil = ref("FF")
 </script>
 
 <style scoped lang="sass">
-.messages-container
-  margin: 30px
 .user-chat
   margin-right: 20px
   margin-left: 20px
