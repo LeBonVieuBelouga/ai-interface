@@ -30,7 +30,8 @@
           <v-card
             color="surface-light"
             class="pa-2"
-            max-height="400px"
+            max-height="700px"
+            width="600px"
           >
             <v-card-text class="pa-4">
               <v-text-field
@@ -52,7 +53,14 @@
                   <v-list-item
                     :key="item.id"
                     :value="item.id"
+                    append-icon="mdi-chevron-right"
+                    density="compact"
                   >
+                    <template #prepend>
+                      <v-icon dark>
+                        mdi-comment-text-outline
+                      </v-icon>
+                    </template>
                     <template #append>
                       <v-btn
                         icon="mdi-chevron-right"
