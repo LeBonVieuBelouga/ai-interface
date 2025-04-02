@@ -1,5 +1,5 @@
 <template>
-  <div class=" position-relative rounded-lg">
+  <div class="full-height position-relative rounded-lg">
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
         <div
@@ -11,6 +11,7 @@
             v-if="message.author === 'user'"
             :profil="profil"
             :message="message"
+            class="ml-auto"
           />
           <AiMessage
             v-else-if="message.author === 'ai'"
@@ -20,9 +21,8 @@
       </div>
     </div>
   </div>
-  <div class=" position-sticky bottom-0 bg-background">
+  <div class=" position-sticky bottom-0 bg-background pa-5">
     <v-textarea
-      class="ma-3"
       :loading="loading"
       height="80"
       density="comfortable"
@@ -36,8 +36,8 @@
       append-inner-icon="mdi-send"
       @click:append-inner="onClick"
     />
-    <div class="text-center pa-1 text-caption text-secondary">
-      Développer par Léo Küttel & Johan Sàrl
+    <div class="text-center pa-1 text-caption text-medium-emphasis">
+      Développer par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>
 </template>
@@ -74,7 +74,6 @@ const profil = ref("FF")
   padding: 10px
   border-radius: 8px
 
-v-textarea
-  margin-top: 100px
-  padding: 100px
+.full-height
+  height: 100%
 </style>

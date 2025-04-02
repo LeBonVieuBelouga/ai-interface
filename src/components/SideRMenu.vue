@@ -44,34 +44,26 @@
                 @click:append-inner="onClick"
               />
               <v-virtual-scroll
-                :items="UserChats"
+                :items="userChats"
                 height="320"
                 item-height="48"
-                item-width="200"
-                width="100%"
-                class="pa-2"
               >
                 <template #default="{ item }">
-                  <v-list
-                    density="compact"
-                    nav
+                  <v-list-item
+                    :key="item.id"
+                    :value="item.id"
                   >
-                    <v-list-item
-                      :key="item.id"
-                      :value="item.id"
-                      :title="item.title"
-                      :subtitle="item.subtitle"
-                    >
-                      <template #append>
-                        <v-btn
-                          icon="mdi-chevron-right"
-                          size="x-small"
-                          variant="tonal"
-                          @click="selectChat(item), isOpenOverlay=false"
-                        />
-                      </template>
-                    </v-list-item>
-                  </v-list>
+                    <template #append>
+                      <v-btn
+                        icon="mdi-chevron-right"
+                        size="x-small"
+                        variant="tonal"
+                        @click="$emit('select-chat', item), isOpenOverlay = false"
+                      />
+                    </template>
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+                  </v-list-item>
                 </template>
               </v-virtual-scroll>
             </v-card-text>
@@ -128,5 +120,4 @@ const isOpenOverlay = ref(false)
 </script>
 
 <style scoped lang="sass">
-
 </style>
