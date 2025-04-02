@@ -4,6 +4,7 @@
       v-model="drawer"
       :user-chats="userConversations"
       :user-data="userProfil"
+      @select-chat="selectChat"
     />
     <v-app-bar
       border="b"

@@ -94,7 +94,7 @@
         v-for="chat in userChats"
         :key="chat.id"
         :value="chat.id"
-        @click="$emit('selectChat',chat)"
+        @click="$emit('select-chat',chat)"
       >
         <v-list-item-title>{{ chat.title }}</v-list-item-title>
         <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
