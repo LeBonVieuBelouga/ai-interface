@@ -3,8 +3,14 @@
     <v-card
       class="message-card"
       variant="outlined"
-      :subtitle="message.time"
     >
+      <v-card-subtitle class="ma-2">
+        <span
+          class="font-weight-black"
+        >
+          {{ message.author }}</span>
+        <span class="font-italic ma-1">{{ message.time }}</span>
+      </v-card-subtitle>
       <v-card-text>
         {{ message.content }}
       </v-card-text>

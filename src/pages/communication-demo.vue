@@ -21,11 +21,46 @@
         Submit
       </button>
     </div>
-    <div id="responseArea">
-      <p>Response:</p>
-      <div>
-        {{ botAnswer }}
+  </div>
+  <div class="full-height position-relative rounded-lg">
+    <div class="position-relative py-3 ps-3">
+      <div class="overflow-y-auto pe-3">
+        <div
+          v-for="(message) in currChat"
+          :key="message.id"
+          class="rounded-lg pa-3 mt-2"
+        >
+          <UserMessage
+            v-if="message.author === 'user'"
+            :profil="profil"
+            :message="message"
+            class="ml-auto"
+          />
+          <AiMessage
+            v-else-if="message.role === 'assistant'"
+            :message="message"
+          />
+        </div>
       </div>
+    </div>
+  </div>
+  <div class=" position-sticky bottom-0 bg-background pa-5">
+    <v-textarea
+      :loading="loading"
+      height="80"
+      density="comfortable"
+      variant="solo"
+      hide-details
+      auto-grow
+      rows="1"
+      no-resize
+      clearable
+      label="Envoyer un nouveau message"
+      append-inner-icon="mdi-send"
+      @click:append-inner="submitChat"
+    />
+    <div class="text-center pa-1 text-caption text-medium-emphasis">
+      Développé par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>
 </template>
@@ -33,19 +68,34 @@
 <script setup>
 import ollama from 'ollama';
 import { ref } from 'vue'
+import UserMessage from "@/components/UserMessage.vue";
+import AiMessage from "@/components/AiMessage.vue";
 
 const chatInput = ref('Why is the sky blue?')
 const botAnswer = ref('')
 
+const currChat = ref('') // contient la liste de la ocnversation en cours avec le bot
+
 const submitChat = async () => {
   const content = chatInput.value;
+  // Ajoute le message de l'utilisateur à la conversation
+  currChat.value.push({
+    role: 'user',
+    content,
+  });
   chatInput.value = '';
+
+
   const response = await ollama.chat({
-    model: 'llama3.2',
+    model: 'deepseek-r1:8b',
     messages: [{ role: 'user', content }],
   });
   console.log(response.message.content);
-  botAnswer.value = response.message.content;
+  botAnswer.value = {
+    role: response.message.role,
+    author: 'bot',
+    content: response.message.content,
+  };
 
 }
 </script>
