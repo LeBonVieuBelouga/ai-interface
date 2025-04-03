@@ -93,6 +93,15 @@ const userProfil =ref({
 })
 const userConversations = ref([
   {
+    id:"demo",
+    title: 'Demo communication avec l’IA',
+    subtitle: ' Rendu déclaratif et liaisons d’attributs',
+    prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
+    to: '/communication-demo',
+    created: '2025-03-04', // Date de création
+    updated: '2025-03-04', // Date de mise à jour
+  },
+  {
     id:"fdfddf-erert",
     title: 'Comment discuter ?',
     subtitle: 'Rendu déclaratif et liaisons d’attributs',
