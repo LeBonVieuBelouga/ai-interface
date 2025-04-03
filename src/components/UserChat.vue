@@ -37,7 +37,7 @@
       @click:append-inner="onClick"
     />
     <div class="text-center pa-1 text-caption text-medium-emphasis">
-      Développer par Léo Kutter & Johan Jambon Sàrl
+      Développé par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>
 </template>
