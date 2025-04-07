@@ -1,15 +1,15 @@
 <template>
   <div class="ma-4 message-container">
     <v-card
-      class="message-card"
+      class="message-card pa-2"
       variant="outlined"
     >
-      <v-card-subtitle class="ma-2">
+      <v-card-subtitle>
         <span
           class="font-weight-black"
         >
           {{ message.author }}</span>
-        <span class="font-italic ma-1">{{ message.time }}</span>
+        <span class="font-italic ma-1">{{ formattedDate }}</span>
       </v-card-subtitle>
       <v-card-text>
         {{ message.content }}
@@ -24,12 +24,23 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   message: {
     type: Object,
     required: true,
-  },
+  }
 });
+
+// Calcul de la date au bon format
+const formattedDate = computed(() => {
+  const date = new Date(props.message.timestamp)
+  return date.toLocaleString(undefined, {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  })
+})
 </script>
 
 <style scoped lang="sass">

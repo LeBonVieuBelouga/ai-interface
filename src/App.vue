@@ -113,13 +113,13 @@ const userConversations = ref([
       {
         id: "0001",
         author: "user",
-        time: "07:30 07/09/2024",
+        timestamp: 1744027796058,
         content: "Aide-moi pitié"
       },
       {
         id: "0002",
         author: "ai",
-        time: "07:31 07/09/2025",
+        timestamp: 1744027796059,
         content: "Non..."
       }
     ]
@@ -135,29 +135,33 @@ const userConversations = ref([
     messages :[
       {
         id: "0001",
-        author: "user",
-        time: "07:30 07/09/2025",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744028358748,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam volu sit amet."
       },
       {
         id: "0002",
-        author: "ai",
-        time: "07:31 07/09/2025",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319639,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat,st Lorem ipsum dolor sit amet."
       },
       {
         id: "0003",
-        author: "user",
-        time: "07:32 07/09/2025",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319640,
         content: "Lorem ipsum dolor sit a nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed Lorem ipsum dolor sit amet."
       },
       {
         id: "0004",
-        author: "ai",
-        time: "07:33 07/09/2025",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319641,
         content: "Lorem ipsum dolor sit amet, consetetusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
           " no sea takimata sanctus est Lorem ipsum dolor sit amet."
       }
@@ -173,8 +177,9 @@ const userConversations = ref([
     messages :[
       {
         id: "0001",
-        author: "user",
-        time: "07:30 07/09/2025",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319642,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
           "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
@@ -189,8 +194,9 @@ const userConversations = ref([
       },
       {
         id: "0002",
-        author: "ai",
-        time: "07:31 07/09/2025",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319643,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
           "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
@@ -200,8 +206,9 @@ const userConversations = ref([
       },
       {
         id: "0003",
-        author: "user",
-        time: "07:32 07/09/2025",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319644,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
           "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
@@ -211,8 +218,9 @@ const userConversations = ref([
       },
       {
         id: "0004",
-        author: "ai",
-        time: "07:33 07/09/2025",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319645,
         content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore" +
           " et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
           "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, " +
@@ -233,14 +241,16 @@ const userConversations = ref([
   messages: [
   {
     id: "1001",
-    author: "user",
-    time: "10:15 12/09/2024",
+    role: "user",
+    author: "Bernard",
+    timestamp: 1744027319646,
     content: "Par où commencer ?"
   },
   {
     id: "1002",
-    author: "ai",
-    time: "10:16 12/09/2024",
+    role: "assistant",
+    author: "DeepSeek",
+    timestamp: 1744027319647,
     content: "Commence par les bases de la syntaxe."
   }
 ]
@@ -256,14 +266,16 @@ const userConversations = ref([
   messages: [
   {
     id: "2001",
-    author: "user",
-    time: "14:45 20/08/2024",
+    role: "user",
+    author: "Bernard",
+    timestamp: 1744027319648,
     content: "Mon code ne fonctionne pas..."
   },
   {
     id: "2002",
-    author: "ai",
-    time: "14:47 20/08/2024",
+    role: "assistant",
+    author: "DeepSeek",
+    timestamp: 1744027319649,
     content: "As-tu vérifié les erreurs dans la console ?"
   }
 ]
@@ -279,14 +291,16 @@ const userConversations = ref([
   messages: [
   {
     id: "3001",
-    author: "user",
-    time: "09:30 10/07/2024",
+    role: "user",
+    author: "Bernard",
+    timestamp: 1744027319650,
     content: "Comment améliorer mon code ?"
   },
   {
     id: "3002",
-    author: "ai",
-    time: "09:32 10/07/2024",
+    role: "assistant",
+    author: "DeepSeek",
+    timestamp: 1744027319700,
     content: "Utilise des noms de variables clairs et commente ton code."
   }
 ]
@@ -302,14 +316,16 @@ const userConversations = ref([
   messages: [
   {
     id: "4001",
-    author: "user",
-    time: "16:20 15/06/2024",
+    role: "user",
+    author: "Bernard",
+    timestamp: 1744027319651,
     content: "Mon app est lente, que faire ?"
   },
   {
     id: "4002",
-    author: "ai",
-    time: "16:22 15/06/2024",
+    role: "assistant",
+    author: "DeepSeek",
+    timestamp: 1744027319652,
     content: "Vérifie les requêtes inutiles et optimise tes boucles."
   }
 ]
@@ -325,14 +341,16 @@ const userConversations = ref([
   messages: [
   {
     id: "5001",
-    author: "user",
-    time: "11:10 25/05/2024",
+    role: "user",
+    author: "Bernard",
+    timestamp: 1744027319653,
     content: "Comment sécuriser mon API ?"
   },
   {
     id: "5002",
-    author: "ai",
-    time: "11:12 25/05/2024",
+    role: "assistant",
+    author: "DeepSeek",
+    timestamp: 1744027319654,
     content: "Utilise l'authentification et valide les entrées utilisateur."
   }
 ]

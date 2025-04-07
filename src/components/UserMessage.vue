@@ -1,21 +1,34 @@
 <template>
-  <div class="ma-4 message-container"> <!-- Ajout de la classe message-container -->
+  <div class="ma-4 message-container">
+    <!-- Ajout de la classe message-container -->
     <v-card
-      :subtitle="message.time"
-      class="message-card"
+      class="message-card pa-2"
     >
+      <v-card-subtitle>
+        <span
+          class="font-weight-black"
+        >
+          {{ message.author }}</span>
+        <span class="font-italic ma-1">{{ formattedDate }}</span>
+      </v-card-subtitle>
       <v-card-text>
         {{ message.content }}
       </v-card-text>
     </v-card>
-    <v-avatar color="red" class="avatar"> <!-- Ajout de la classe avatar -->
+    <v-avatar
+      color="red"
+      class="avatar"
+    >
+      <!-- Ajout de la classe avatar -->
       <span class="white--text text-h5">{{ profil }}</span>
     </v-avatar>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   message: {
     type: Object,
     required: true,
@@ -23,9 +36,20 @@ defineProps({
   profil: {
     type: String,
     required: false,
-    default: 'U', // Valeur par défaut si le profil n'est pas fourni
+    default: 'U',
   },
 });
+
+// Calcul de la date au bon format
+const formattedDate = computed(() => {
+  const date = new Date(props.message.timestamp)
+  return date.toLocaleString(undefined, {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  })
+})
+
+console.log(formattedDate);
 </script>
 
 <style scoped lang="sass">
