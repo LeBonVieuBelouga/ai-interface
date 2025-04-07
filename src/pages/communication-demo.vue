@@ -1,27 +1,6 @@
 
 <template>
   <h1>Demostration communication</h1>
-  <div id="chatBox">
-    <div id="chatContainer">
-      <div
-        id="chatArea"
-        ref="chatArea"
-      />
-    </div>
-    <div id="inputArea">
-      <input
-        id="chatInput"
-        v-model="chatInput"
-        @keyup.enter="submitChat"
-      >
-      <button
-        id="submitButton"
-        @click="submitChat"
-      >
-        Submit
-      </button>
-    </div>
-  </div>
   <div class="full-height position-relative rounded-lg">
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
@@ -31,7 +10,7 @@
           class="rounded-lg pa-3 mt-2"
         >
           <UserMessage
-            v-if="message.author === 'user'"
+            v-if="message.role === 'user'"
             :profil="profil"
             :message="message"
             class="ml-auto"
@@ -46,6 +25,7 @@
   </div>
   <div class=" position-sticky bottom-0 bg-background pa-5">
     <v-textarea
+      v-model="chatInput"
       :loading="loading"
       height="80"
       density="comfortable"
@@ -58,6 +38,7 @@
       label="Envoyer un nouveau message"
       append-inner-icon="mdi-send"
       @click:append-inner="submitChat"
+      @keyup.enter="submitChat"
     />
     <div class="text-center pa-1 text-caption text-medium-emphasis">
       Développé par Léo Kutter & Johan Jambon Sàrl
@@ -71,17 +52,30 @@ import { ref } from 'vue'
 import UserMessage from "@/components/UserMessage.vue";
 import AiMessage from "@/components/AiMessage.vue";
 
-const chatInput = ref('Why is the sky blue?')
-const botAnswer = ref('')
+// Variables qui donne le temps actuel
+const today = new Date();
+const chatInput = ref('Qui es-tu ?')
+//const botAnswer = ref('')
 
 const currChat = ref('') // contient la liste de la ocnversation en cours avec le bot
+currChat.value = []
+
+function getNow() {
+  //today.getTime("jj/mm/aaaa hh:mm:ss");
+  let date = +today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  let dateTime = date +' '+ time;
+  return dateTime;
+}
 
 const submitChat = async () => {
   const content = chatInput.value;
   // Ajoute le message de l'utilisateur à la conversation
   currChat.value.push({
     role: 'user',
-    content,
+    author: 'Gregory',
+    time: getNow(),
+    content : content,
   });
   chatInput.value = '';
 
@@ -91,12 +85,13 @@ const submitChat = async () => {
     messages: [{ role: 'user', content }],
   });
   console.log(response.message.content);
-  botAnswer.value = {
+  currChat.value.push({
     role: response.message.role,
     author: 'bot',
+    time: getNow(),
     content: response.message.content,
-  };
-
+  });
+  console.log(currChat.value);
 }
 </script>
 
