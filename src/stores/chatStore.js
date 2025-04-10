@@ -1,108 +1,42 @@
-<template>
-  <v-app>
-    <SideRMenu
-      v-model="drawer"
-      :user-chats="userConversations"
-      :user-data="userProfil"
-      @select-chat="selectChat"
-    />
-    <v-app-bar
-      border="b"
-      class="ps-4"
-      flat
-    >
-      <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-app-bar-title>
-        <v-btn
-          color="primary"
-        >
-          {{ AISelected }}
-          <v-icon
-            icon="mdi-chevron-down"
-            size="large"
-            end
-          />
-          <v-menu activator="parent">
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in aiTypes"
-                :key="index"
-                :value="index"
-              >
-                <v-list-item-title @click=" AISelected = item.name">
-                  {{ item.name }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </v-app-bar-title>
-    </v-app-bar>
-
-    <v-main>
-      <router-view v-if="!currChat" />
-      <UserChat
-        v-else
-        :chat="currChat"
-      />
-    </v-main>
-  </v-app>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-import UserChat from "@/components/UserChat.vue";
-import SideRMenu from "@/components/SideRMenu.vue";
-
-const AISelected = ref( "Deep Sick🤒🤖")
-const drawer = ref(true)
-const currChat = ref(null)
-const aiTypes = ref([
+/**
+ * @file chatStore.js Gestionnaire de l'état des chats
+ * Utilise Pinia pour gérer les états et actions liés aux chats et aux messages.
+ * Ce magasin permet de stocker, récupérer, ajouter et supprimer des chats.
+ * @version 1.0
+ * @since 2025-01-31
+ */
+import { defineStore } from 'pinia'
+/**
+ * Liste des chats et des messages qu'ils les composent
+ * Chaque chat est un objet contenant un identifiant, un nom et une liste de messages
+ * @type {Array} defaultChat
+ */
+const defaultChats = [
   {
-    id:"EEE",
-    name:"Deep Sick🤒🤖",
-    isEnable: false
-  },
-  {
-    id:"EE4E",
-    name:"Deep Seek 8Gb",
-    isEnable: true
-  },
-  {
-    id:"EE5E",
-    name:"Llama 3",
-    isEnable: false
-  },
-  {
-    id:"EE6E",
-    name:"Mixtral 8x7B",
-    isEnable: true
-  },
-  {
-    id:"EE7E",
-    name:"Gemma",
-    isEnable: false
-  },
-])
-const userProfil =ref({
-  id:"000-0001",
-  username:"johan.tomy",
-  email:"john@tomy.ch",
-  nickname:"Johan Tomy",
-  avatar:"https://cdn.vuetifyjs.com/images/john.png",
-})
-const userConversations = ref([
-  {
-    id:"demo",
+    id:0,
     title: 'Demo communication avec l’IA',
     subtitle: ' Rendu déclaratif et liaisons d’attributs',
     prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
     to: '/communication-demo',
     created: '2025-03-04', // Date de création
     updated: '2025-03-04', // Date de mise à jour
+    messages :[
+      {
+        id: "0001",
+        author: "user",
+        timestamp: 1744027796058,
+        content: "Aide-moi pitié"
+      },
+      {
+        id: "0002",
+        author: "ai",
+        timestamp: 1744027796059,
+        content: "Non..."
+      }
+    ]
   },
   {
-    id:"fdfddf-erert",
+    id:2,
     title: 'Comment discuter ?',
     subtitle: 'Rendu déclaratif et liaisons d’attributs',
     prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
@@ -125,7 +59,7 @@ const userConversations = ref([
     ]
   },
   {
-    id:"TU23GC-erert",
+    id:3,
     title: 'Qui sommes-nous ?',
     subtitle: 'Gestion des événements et champs de formulaire',
     prependIcon: 'mdi-form-select', // Icône pertinente pour un formulaire
@@ -168,7 +102,7 @@ const userConversations = ref([
     ]
   },
   {
-    id:"TU23GC-bds4",
+    id:4,
     title: 'Qui ça qui ça ?',
     subtitle: 'Gestion des événements et champs de formulaire',
     prependIcon: 'mdi-form-select', // Icône pertinente pour un formulaire
@@ -231,132 +165,177 @@ const userConversations = ref([
     ]
   },
   {
-    id: "abcd-1234",
+    id: 5,
     title: "Apprendre les bases",
     subtitle: "Introduction aux concepts fondamentaux",
     prependIcon: "mdi-school-outline",
     to: null,
     created: "2023-09-15",
     updated: "2023-09-20",
-  messages: [
-  {
-    id: "1001",
-    role: "user",
-    author: "Bernard",
-    timestamp: 1744027319646,
-    content: "Par où commencer ?"
+    messages: [
+      {
+        id: "1001",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319646,
+        content: "Par où commencer ?"
+      },
+      {
+        id: "1002",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319647,
+        content: "Commence par les bases de la syntaxe."
+      }
+    ]
   },
   {
-    id: "1002",
-    role: "assistant",
-    author: "DeepSeek",
-    timestamp: 1744027319647,
-    content: "Commence par les bases de la syntaxe."
-  }
-]
-},
-{
-  id: "efgh-5678",
-  title: "Résolution de problèmes",
-  subtitle: "Techniques pour déboguer efficacement",
-  prependIcon: "mdi-bug-outline",
-  to: null,
-  created: "2023-08-10",
-  updated: "2023-08-25",
-  messages: [
-  {
-    id: "2001",
-    role: "user",
-    author: "Bernard",
-    timestamp: 1744027319648,
-    content: "Mon code ne fonctionne pas..."
+    id: 6,
+    title: "Résolution de problèmes",
+    subtitle: "Techniques pour déboguer efficacement",
+    prependIcon: "mdi-bug-outline",
+    to: null,
+    created: "2023-08-10",
+    updated: "2023-08-25",
+    messages: [
+      {
+        id: "2001",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319648,
+        content: "Mon code ne fonctionne pas..."
+      },
+      {
+        id: "2002",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319649,
+        content: "As-tu vérifié les erreurs dans la console ?"
+      }
+    ]
   },
   {
-    id: "2002",
-    role: "assistant",
-    author: "DeepSeek",
-    timestamp: 1744027319649,
-    content: "As-tu vérifié les erreurs dans la console ?"
-  }
-]
-},
-{
-  id: "ijkl-9012",
+    id: 7,
     title: "Bonnes pratiques",
-  subtitle: "Écrire un code propre et maintenable",
-  prependIcon: "mdi-check-all",
-  to: null,
-  created: "2023-07-05",
-  updated: "2023-07-15",
-  messages: [
-  {
-    id: "3001",
-    role: "user",
-    author: "Bernard",
-    timestamp: 1744027319650,
-    content: "Comment améliorer mon code ?"
+    subtitle: "Écrire un code propre et maintenable",
+    prependIcon: "mdi-check-all",
+    to: null,
+    created: "2023-07-05",
+    updated: "2023-07-15",
+    messages: [
+      {
+        id: "3001",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319650,
+        content: "Comment améliorer mon code ?"
+      },
+      {
+        id: "3002",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319700,
+        content: "Utilise des noms de variables clairs et commente ton code."
+      }
+    ]
   },
   {
-    id: "3002",
-    role: "assistant",
-    author: "DeepSeek",
-    timestamp: 1744027319700,
-    content: "Utilise des noms de variables clairs et commente ton code."
-  }
-]
-},
-{
-  id: "mnop-3456",
+    id: 8,
     title: "Optimisation",
-  subtitle: "Améliorer les performances de votre application",
-  prependIcon: "mdi-speedometer",
-  to: null,
-  created: "2023-06-01",
-  updated: "2023-06-10",
-  messages: [
-  {
-    id: "4001",
-    role: "user",
-    author: "Bernard",
-    timestamp: 1744027319651,
-    content: "Mon app est lente, que faire ?"
+    subtitle: "Améliorer les performances de votre application",
+    prependIcon: "mdi-speedometer",
+    to: null,
+    created: "2023-06-01",
+    updated: "2023-06-10",
+    messages: [
+      {
+        id: "4001",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319651,
+        content: "Mon app est lente, que faire ?"
+      },
+      {
+        id: "4002",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319652,
+        content: "Vérifie les requêtes inutiles et optimise tes boucles."
+      }
+    ]
   },
   {
-    id: "4002",
-    role: "assistant",
-    author: "DeepSeek",
-    timestamp: 1744027319652,
-    content: "Vérifie les requêtes inutiles et optimise tes boucles."
-  }
-]
-},
-{
-  id: "qrst-7890",
+    id: 9,
     title: "Sécurité",
-  subtitle: "Protéger votre application des vulnérabilités",
-  prependIcon: "mdi-shield-outline",
-  to: null,
-  created: "2023-05-12",
-  updated: "2023-05-20",
-  messages: [
-  {
-    id: "5001",
-    role: "user",
-    author: "Bernard",
-    timestamp: 1744027319653,
-    content: "Comment sécuriser mon API ?"
-  },
-  {
-    id: "5002",
-    role: "assistant",
-    author: "DeepSeek",
-    timestamp: 1744027319654,
-    content: "Utilise l'authentification et valide les entrées utilisateur."
+    subtitle: "Protéger votre application des vulnérabilités",
+    prependIcon: "mdi-shield-outline",
+    to: null,
+    created: "2023-05-12",
+    updated: "2023-05-20",
+    messages: [
+      {
+        id: "5001",
+        role: "user",
+        author: "Bernard",
+        timestamp: 1744027319653,
+        content: "Comment sécuriser mon API ?"
+      },
+      {
+        id: "5002",
+        role: "assistant",
+        author: "DeepSeek",
+        timestamp: 1744027319654,
+        content: "Utilise l'authentification et valide les entrées utilisateur."
+      }
+    ]
   }
 ]
-}
-]);
-const selectChat = (chat) => {
-  currChat.value = chat; // Met à jour le chat sélectionné
-};
-</script>
+
+/**
+ * Gestionnaire de l'état des chats
+ * @type {Array<"chats", {chats, user: null}, {getChatList: (function(*): *), getChatById: (function(*): function(*): *)}, {deleteChat(string): void, addChat(Object): void}>}
+ */
+export const useChatStore = defineStore('chat', {
+  // État initial du magasin.
+  state: () => ({
+    // On charge la liste de pokémons depuis le localStorage si elle existe, sinon on utilise la liste par défaut.
+    chats: JSON.parse(localStorage.getItem('chats')) || defaultChats,
+  }),
+
+  // Getters pour accéder aux données du magasin.
+  getters: {
+    /**
+     * Récupère la liste des chats.
+     * @returns {Array} Liste des chats.
+     */
+    getChatList: state => {
+      return state.chats
+    },
+    /**
+     * Récupère un chat spécifique par son identifiant.
+     * @param {string} id - Identifiant du chat.
+     * @returns {Object|null} Chat correspondant à l'identifiant ou null s'il n'existe pas.
+     */
+    getChatById: state => id => {
+      return state.chats.find(chat => chat.id === id)
+    },
+  },
+  actions: {
+    /**
+     * Ajoute un nouveau chat à la liste et le sauvegarde dans le localStorage.
+     * @param {Object} newChat - Nouveau chat à ajouter.
+     */
+    addChat(newChat) {
+      this.chats.push(newChat)
+      localStorage.setItem('chats', JSON.stringify(this.chats))
+    },
+    /**
+     * Supprime un chat de la liste et met à jour le localStorage.
+     * @param {string} id - Identifiant du chat à supprimer.
+     */
+    deleteChat(id) {
+      this.chats = this.chats.filter(chat => chat.id !== id)
+      localStorage.setItem('chats', JSON.stringify(this.chats))
+    },
+  },
+})

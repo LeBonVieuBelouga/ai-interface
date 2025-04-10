@@ -1,27 +1,31 @@
 <template>
-  <h1 class="text-center ma-5"> Comment puis-je vous aider ?</h1>
-  <v-card
-    class="mx-auto"
-    color="surface-light"
-    max-width="800"
-    border
-  >
-    <v-card-text>
-      <v-textarea
-        :loading="loading"
-        height="80"
-        append-inner-icon="mdi-magnify"
-        density="compact"
-        variant="solo"
-        hide-details
-        auto-grow
-        rows="1"
-        no-resize
-        @click:append-inner="onClick"
-        clearable
-      ></v-textarea>
-    </v-card-text>
-  </v-card>
+  <v-container>
+    <h1 class="text-center ma-5">
+      Comment puis-je vous aider ?
+    </h1>
+    <v-card
+      class="mx-auto"
+      color="surface-light"
+      max-width="800"
+      border
+    >
+      <v-card-text>
+        <v-textarea
+          :loading="loading"
+          height="80"
+          append-inner-icon="mdi-magnify"
+          density="compact"
+          variant="solo"
+          hide-details
+          auto-grow
+          rows="1"
+          no-resize
+          clearable
+          @click:append-inner="onClick"
+        />
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>

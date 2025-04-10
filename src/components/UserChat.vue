@@ -3,18 +3,18 @@
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
         <div
-          v-for="(message) in mergedMessages"
+          v-for="(message) in displayedMessages"
           :key="message.id"
           class="rounded-lg pa-3 mt-2"
         >
           <UserMessage
-            v-if="message.author === 'user'"
+            v-if="message.role === 'user'"
             :profil="profil"
             :message="message"
             class="ml-auto"
           />
           <AiMessage
-            v-else-if="message.author === 'ai'"
+            v-else-if="message.role === 'assistant'"
             :message="message"
           />
         </div>
@@ -23,6 +23,7 @@
   </div>
   <div class=" position-sticky bottom-0 bg-background pa-5">
     <v-textarea
+      v-model="chatInput"
       :loading="loading"
       height="80"
       density="comfortable"
@@ -34,7 +35,8 @@
       clearable
       label="Envoyer un nouveau message"
       append-inner-icon="mdi-send"
-      @click:append-inner="onClick"
+      @click:append-inner="submitChat"
+      @keyup.enter="submitChat"
     />
     <div class="text-center pa-1 text-caption text-medium-emphasis">
       Développé par Léo Kutter & Johan Jambon Sàrl
@@ -46,6 +48,7 @@
 import UserMessage from "@/components/UserMessage.vue";
 import { computed ,ref } from 'vue';
 import AiMessage from "@/components/AiMessage.vue";
+import ollama from "ollama";
 
 const props = defineProps({
   chat: {
@@ -54,11 +57,61 @@ const props = defineProps({
   }
 })
 
-// Fusion et tri chronologique
-const mergedMessages = computed(() => {
+const sortedMessages = computed(() => {
   return [...props.chat.messages]
     .sort((a, b) => a.timestamp - b.timestamp)
 })
+
+// Fusion et tri chronologique
+const displayedMessages = ref('')
+displayedMessages.value = sortedMessages.value
+
+console.log(displayedMessages.value);
+
+const chatInput = ref('Qui es-tu ?')
+const loading = ref(false);
+
+const submitChat = async () => {
+  // Vérifie s'il y a du texte dans le champ de saisie et si le bot n'est pas déjà en train de répondre
+  if (!chatInput.value.trim() || loading.value) return;
+
+  loading.value = true;
+  const content = chatInput.value;
+
+  const userMessage = {
+    id: Date.now(),
+    role: 'user',
+    author: 'Gregory',
+    timestamp: Date.now(),
+    content : content,
+  }
+  // Ajoute le message de l'utilisateur à la conversation
+  displayedMessages.value.push(userMessage);
+  chatInput.value = '';
+
+  try {
+    const response = await ollama.chat({
+      model: 'deepseek-r1:8b',
+      messages: [{ role: 'user', content }],
+    });
+
+    // Ajout de la réponse de l'IA
+    const aiMessage = {
+      id: Date.now(),
+      role: response.message.role,
+      author: 'bot',
+      timestamp: Date.now(),
+      content: response.message.content,
+    };
+
+    displayedMessages.value.push(aiMessage);
+  } catch (error) {
+    console.error("Erreur avec Ollama:", error);
+  } finally {
+    loading.value = false;
+  }
+  console.log(Date.now())
+}
 
 const profil = ref("FF")
 </script>
