@@ -49,7 +49,7 @@
                 height="320"
                 item-height="48"
               >
-                <template #default="{ item }">
+                <template #item="{ item }">
                   <v-list-item
                     :key="item.id"
                     :value="item.id"
