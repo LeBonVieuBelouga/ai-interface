@@ -55,6 +55,7 @@ import AiMessage from "@/components/AiMessage.vue";
 // Variables qui donne le temps actuel
 const today = new Date();
 const chatInput = ref('Qui es-tu ?')
+let prompt = ''
 //const botAnswer = ref('')
 
 const currChat = ref('') // contient la liste de la ocnversation en cours avec le bot
@@ -77,21 +78,36 @@ const submitChat = async () => {
     time: getNow(),
     content : content,
   });
+  prompt += "\nUtilisateur a dit : " + chatInput.value + "\n"
   chatInput.value = '';
 
 
-  const response = await ollama.chat({
-    model: 'deepseek-r1:8b',
-    messages: [{ role: 'user', content }],
-  });
-  console.log(response.message.content);
+
+  const response = await fetch('http://10.211.120.39:11434/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'mistral',
+      messages: [
+        { role: 'user', content: prompt }
+      ],
+      stream: false
+    })
+  })
+
+  const data = await response.json()
+
+  console.log(data);
   currChat.value.push({
-    role: response.message.role,
+    role: data.message.role,
     author: 'bot',
     time: getNow(),
-    content: response.message.content,
+    content: data.message.content,
   });
   console.log(currChat.value);
+  prompt += "Tu as répondu : " + data.message.content + "\n"
 }
 </script>
 
