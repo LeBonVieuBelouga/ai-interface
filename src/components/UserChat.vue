@@ -2,7 +2,7 @@
   <div class="full-height position-relative rounded-lg">
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
-        <template
+        <div
           v-for="(message) in displayedMessages"
           :key="message.id"
           class="rounded-lg pa-3 mt-2"
@@ -23,7 +23,7 @@
           >
             Format de message inconnu (role: {{ message.role.value }})
           </div>
-        </template>
+        </div>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
       @click:append-inner="submitChat"
       @keyup.enter="submitChat"
     />
-    <div class="text-center pa-1 text-caption text-medium-emphasis">
+    <div class="text-center pa-2 text-caption text-medium-emphasis">
       Développé par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>

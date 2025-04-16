@@ -1,8 +1,23 @@
-
-
 <template>
+  <div
+    class="position-sticky inline"
+    style="top: 64px; z-index: 1;"
+  >
+    <div
+      v-if="selectedChat !== undefined"
+    >
+      <p class="text-h6 text-center bg-background d-block ">
+        {{ selectedChat.title }}
+      </p>
+      <span class="lineaire-simple pa-2 d-block" />
+    </div>
+
+    <div v-else>
+      Loading...
+    </div>
+  </div>
+
   <v-container>
-    <h1>Chat {{ id }}</h1>
     <UserChat
       v-if="selectedChat !== undefined"
       :chat="selectedChat"
@@ -49,5 +64,7 @@ watch(
 </script>
 
 <style scoped lang="sass">
+.lineaire-simple
+  background: linear-gradient(rgba(0, 0, 0, 0.32) 60%,transparent)
 
 </style>
