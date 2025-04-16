@@ -27,7 +27,10 @@
       </div>
     </div>
   </div>
-  <div class=" position-sticky bottom-0 bg-background pa-5">
+  <div
+    class=" position-sticky bottom-0 bg-background pa-7"
+    style="padding-bottom: 160px;"
+  >
     <v-textarea
       v-model="chatInput"
       :loading="loading"
@@ -44,7 +47,7 @@
       @click:append-inner="submitChat"
       @keyup.enter="submitChat"
     />
-    <div class="text-center pa-2 text-caption text-medium-emphasis">
+    <div class="text-center pa-3 text-caption text-medium-emphasis">
       Développé par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>

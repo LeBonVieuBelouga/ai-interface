@@ -1,70 +1,80 @@
 <template>
-  <div
-    class="position-sticky inline"
-    style="top: 64px; z-index: 1;"
-  >
+  <div v-if="selectedChat !== undefined">
     <div
-      v-if="selectedChat !== undefined"
+      class="position-sticky inline"
+      style="top: 64px; z-index: 1;"
     >
-      <p class="text-h6 text-center bg-background d-block ">
-        {{ selectedChat.title }}
-      </p>
-      <span class="lineaire-simple pa-2 d-block" />
+      <div
+        class="text-h6 text-center bg-background elevation-15"
+      >
+        {{ chatTitle }}
+      </div>
+      <v-progress-linear
+        :active="loading"
+        :indeterminate="loading"
+        location="bottom"
+        absolute
+      />
     </div>
-
-    <div v-else>
-      Loading...
-    </div>
-  </div>
-
-  <v-container>
     <UserChat
-      v-if="selectedChat !== undefined"
       :chat="selectedChat"
     />
-    <p
-      v-else
+  </div>
+  <v-empty-state
+    v-else
+    headline="Wooh, 404 !"
+    title="Discussion introuvable..."
+    text="La conversation recherchée n'existe pas"
+    image="/public/images/Face-With-Spiral-Eyes.png"
+  >
+    <v-btn
+      class="ma-5"
+      color="primary"
+      large
+      to="/"
     >
-      Erreur 404 Aucune discussion trouvée.
-    </p>
-  </v-container>
+      Retour à l'accueil
+    </v-btn>
+  </v-empty-state>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
-import { onMounted,ref, watch } from 'vue'
+import { onMounted,ref } from 'vue'
 import { useChatStore } from '@/stores/chatStore'
 import UserChat from "@/components/UserChat.vue";
 
 const route = useRoute()
-const id = ref(null)
+const urlID = ref(null)
 const selectedChat = ref(undefined) // Initialisé à undefined pour différencier "non chargé" et "non trouvé"
 
 const chatStore = useChatStore()
+const loading = ref(true)
+const chatTitle = ref('Chargement de la discussion...')
 
+/**
+ * Fonction pour charger une discussion par son ID.
+ * @param {number} chatId - L'ID de la discussion à charger.
+ */
 const loadChat = (chatId) => {
   const chat = chatStore.getChatById(chatId)
   console.log('Chat trouvé : ', chat)
+  if(chat !== undefined) {
+    chatTitle.value = chat.title
+  }
+  loading.value = false
   selectedChat.value = chat ?? undefined // Convertit explicitement null/undefined en undefined
 }
 
+/**
+ * Watcher pour surveiller les changements de l'ID de la discussion
+ * et charger la discussion correspondante.
+ */
 onMounted(() => {
-  id.value = Number(route.params.id)
-  loadChat(id.value)
+  urlID.value = Number(route.params.id)
+  loadChat(urlID.value)
 })
-
-watch(
-  () => route.params.id,
-  (newId) => {
-    id.value = Number(newId)
-    loadChat(id.value)
-  },
-  { immediate: false }
-)
-//console.log('Premier message : ', selectedChat.value.messages[1])
 </script>
 
 <style scoped lang="sass">
-.lineaire-simple
-  background: linear-gradient(rgba(0, 0, 0, 0.32) 60%,transparent)
 
 </style>
