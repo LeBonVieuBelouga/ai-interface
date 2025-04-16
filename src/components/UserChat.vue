@@ -2,7 +2,7 @@
   <div class="full-height position-relative rounded-lg">
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
-        <div
+        <template
           v-for="(message) in displayedMessages"
           :key="message.id"
           class="rounded-lg pa-3 mt-2"
@@ -17,7 +17,13 @@
             v-else-if="message.role === 'assistant'"
             :message="message"
           />
-        </div>
+          <div
+            v-else
+            class="text-warning"
+          >
+            Format de message inconnu (role: {{ message.role.value }})
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -44,11 +50,10 @@
   </div>
 </template>
 <script setup>
-
-import UserMessage from "@/components/UserMessage.vue";
 import { computed ,ref } from 'vue';
-import AiMessage from "@/components/AiMessage.vue";
 import ollama from "ollama";
+import AiMessage from "@/components/AiMessage.vue";
+import UserMessage from "@/components/UserMessage.vue";
 
 const props = defineProps({
   chat: {
@@ -66,7 +71,7 @@ const sortedMessages = computed(() => {
 const displayedMessages = ref('')
 displayedMessages.value = sortedMessages.value
 
-console.log(displayedMessages.value);
+console.log("Valeur actuel de displayMessages : ",displayedMessages.value);
 
 const chatInput = ref('Qui es-tu ?')
 const loading = ref(false);
@@ -110,10 +115,13 @@ const submitChat = async () => {
   } finally {
     loading.value = false;
   }
-  console.log(Date.now())
 }
-
 const profil = ref("FF")
+
+// Affiche les message de displayedMessages dans la consoles avec un foreach
+displayedMessages.value.forEach((message) => {
+  console.log("Message : ", message);
+});
 </script>
 
 <style scoped lang="sass">

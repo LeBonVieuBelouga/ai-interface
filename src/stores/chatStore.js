@@ -22,14 +22,16 @@ const defaultChats = [
     updated: '2025-03-04', // Date de mise à jour
     messages :[
       {
-        id: '0001',
-        author: 'user',
+        id: '1',
+        role: 'user',
+        author: 'Seb',
         timestamp: 1744027796058,
         content: 'Aide-moi pitié'
       },
       {
-        id: '0002',
-        author: 'ai',
+        id: '2',
+        role: 'assistant',
+        author: 'DeepSeek-r1',
         timestamp: 1744027796059,
         content: 'Non...'
       }
@@ -46,13 +48,15 @@ const defaultChats = [
     messages :[
       {
         id: '0001',
-        author: 'user',
+        role: 'user',
+        author: 'Seb',
         timestamp: 1744027796058,
         content: 'Aide-moi pitié'
       },
       {
         id: '0002',
-        author: 'ai',
+        role: 'assistant',
+        author: 'DeepSeek-r1',
         timestamp: 1744027796059,
         content: 'Non...'
       }
@@ -317,7 +321,9 @@ export const useChatStore = defineStore('chat', {
      * @returns {Object|null} Chat correspondant à l'identifiant ou null s'il n'existe pas.
      */
     getChatById: state => id => {
-      return state.chats.find(chat => chat.id === id)
+      // Convertit l'ID recherché et les IDs des chats en Number pour la comparaison
+      const searchId = Number(id)
+      return state.chats.find(chat => Number(chat.id) === searchId)
     },
   },
   actions: {
