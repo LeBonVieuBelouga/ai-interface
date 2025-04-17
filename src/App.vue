@@ -4,7 +4,6 @@
       v-model="drawer"
       :user-chats="userConversations"
       :user-data="userProfil"
-      @select-chat="selectChat"
     />
     <v-app-bar
       border="b"
@@ -40,18 +39,13 @@
     </v-app-bar>
 
     <v-main>
-      <router-view v-if="!currChat" />
-      <UserChat
-        v-else
-        :chat="currChat"
-      />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import UserChat from "@/components/UserChat.vue";
 import SideRMenu from "@/components/SideRMenu.vue";
 
 const AISelected = ref( "Deep Sick🤒🤖")

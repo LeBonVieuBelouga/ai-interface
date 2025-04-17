@@ -3,7 +3,7 @@
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
         <div
-          v-for="(message) in displayedMessages"
+          v-for="(message) in sortedMessages"
           :key="message.id"
           class="rounded-lg pa-3 mt-2"
         >
@@ -62,8 +62,15 @@ const props = defineProps({
   chat: {
     type: Object,
     required: true,
+    default: () => ({
+      id: 0,
+      title: '',
+      messages: [],
+    }),
   }
 })
+
+
 
 const sortedMessages = computed(() => {
   return [...props.chat.messages]
@@ -73,8 +80,6 @@ const sortedMessages = computed(() => {
 // Fusion et tri chronologique
 const displayedMessages = ref('')
 displayedMessages.value = sortedMessages.value
-
-console.log("Valeur actuel de displayMessages : ",displayedMessages.value);
 
 const chatInput = ref('Qui es-tu ?')
 const loading = ref(false);

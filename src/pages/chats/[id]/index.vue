@@ -7,7 +7,7 @@
       <div
         class="text-h6 text-center bg-background elevation-15"
       >
-        {{ chatTitle }}
+        {{ selectedChat?.title }}
       </div>
       <v-progress-linear
         :active="loading"
@@ -17,6 +17,7 @@
       />
     </div>
     <UserChat
+      v-if="selectedChat"
       :chat="selectedChat"
     />
   </div>
@@ -39,30 +40,23 @@
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
-import { onMounted,ref } from 'vue'
+import { onMounted,ref,watch } from 'vue'
 import { useChatStore } from '@/stores/chatStore'
 import UserChat from "@/components/UserChat.vue";
 
 const route = useRoute()
-const urlID = ref(null)
-const selectedChat = ref(undefined) // Initialisé à undefined pour différencier "non chargé" et "non trouvé"
+const selectedChat = ref(null) // Initialisé à undefined pour différencier "non chargé" et "non trouvé"
 
 const chatStore = useChatStore()
 const loading = ref(true)
-const chatTitle = ref('Chargement de la discussion...')
 
 /**
  * Fonction pour charger une discussion par son ID.
- * @param {number} chatId - L'ID de la discussion à charger.
  */
-const loadChat = (chatId) => {
-  const chat = chatStore.getChatById(chatId)
-  console.log('Chat trouvé : ', chat)
-  if(chat !== undefined) {
-    chatTitle.value = chat.title
-  }
+const loadChat = () => {
+  const chat = chatStore.getChatById(Number(route.params.id))
   loading.value = false
-  selectedChat.value = chat ?? undefined // Convertit explicitement null/undefined en undefined
+  selectedChat.value = chat
 }
 
 /**
@@ -70,9 +64,16 @@ const loadChat = (chatId) => {
  * et charger la discussion correspondante.
  */
 onMounted(() => {
-  urlID.value = Number(route.params.id)
-  loadChat(urlID.value)
+  loadChat()
 })
+//onUpdate
+watch(
+  () => route.params.id,
+  () => {
+    loadChat()
+  },
+  { immediate: false }
+)
 </script>
 
 <style scoped lang="sass">

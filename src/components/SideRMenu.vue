@@ -91,10 +91,10 @@
       nav
     >
       <v-list-item
-        v-for="chat in userChats"
+        v-for="chat in chatsList"
         :key="chat.id"
         :value="chat.id"
-        @click="$emit('select-chat',chat)"
+        :to="`/chats/${chat.id}`"
       >
         <v-list-item-title>{{ chat.title }}</v-list-item-title>
         <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
@@ -113,18 +113,21 @@
 
 <script setup>
 import {ref} from "vue";
+import {useChatStore} from "@/stores/chatStore.js";
 
 defineProps({
-  userChats: {
-    type: Object,
-    required: true,
-  },
   userData:{
     type: Object,
     required: true,
   }
 });
 const isOpenOverlay = ref(false)
+const chatStore = useChatStore()
+
+const chatsList = ref(null)
+
+chatsList.value = chatStore.getChatList
+
 </script>
 
 <style scoped lang="sass">
