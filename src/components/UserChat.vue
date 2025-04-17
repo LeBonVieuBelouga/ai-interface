@@ -3,7 +3,7 @@
     <div class="position-relative py-3 ps-3">
       <div class="overflow-y-auto pe-3">
         <div
-          v-for="(message) in sortedMessages"
+          v-for="(message) in displayedMessages"
           :key="message.id"
           class="rounded-lg pa-3 mt-2"
         >
@@ -70,19 +70,13 @@ const props = defineProps({
   }
 })
 
-
-
-const sortedMessages = computed(() => {
+const displayedMessages = computed(() => {
   return [...props.chat.messages]
     .sort((a, b) => a.timestamp - b.timestamp)
 })
-
-// Fusion et tri chronologique
-const displayedMessages = ref('')
-displayedMessages.value = sortedMessages.value
-
-const chatInput = ref('Qui es-tu ?')
 const loading = ref(false);
+const profil = ref("FF")
+const chatInput = ref('Qui es-tu ?')
 
 const submitChat = async () => {
   // Vérifie s'il y a du texte dans le champ de saisie et si le bot n'est pas déjà en train de répondre
@@ -91,6 +85,7 @@ const submitChat = async () => {
   loading.value = true;
   const content = chatInput.value;
 
+  // Crée un message utilisateur avec un ID unique
   const userMessage = {
     id: Date.now(),
     role: 'user',
@@ -124,12 +119,6 @@ const submitChat = async () => {
     loading.value = false;
   }
 }
-const profil = ref("FF")
-
-// Affiche les message de displayedMessages dans la consoles avec un foreach
-displayedMessages.value.forEach((message) => {
-  console.log("Message : ", message);
-});
 </script>
 
 <style scoped lang="sass">
