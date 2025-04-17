@@ -17,11 +17,20 @@
             v-else-if="message.role === 'assistant'"
             :message="message"
           />
+          <div
+            v-else
+            class="text-warning"
+          >
+            Format de message inconnu (role: {{ message.role.value }})
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class=" position-sticky bottom-0 bg-background pa-5">
+  <div
+    class=" position-sticky bottom-0 bg-background pa-7"
+    style="padding-bottom: 160px;"
+  >
     <v-textarea
       v-model="chatInput"
       :loading="loading"
@@ -38,38 +47,36 @@
       @click:append-inner="submitChat"
       @keyup.enter="submitChat"
     />
-    <div class="text-center pa-1 text-caption text-medium-emphasis">
+    <div class="text-center pa-3 text-caption text-medium-emphasis">
       Développé par Léo Kutter & Johan Jambon Sàrl
     </div>
   </div>
 </template>
 <script setup>
-
-import UserMessage from "@/components/UserMessage.vue";
 import { computed ,ref } from 'vue';
-import AiMessage from "@/components/AiMessage.vue";
 import ollama from "ollama";
+import AiMessage from "@/components/AiMessage.vue";
+import UserMessage from "@/components/UserMessage.vue";
 
 const props = defineProps({
   chat: {
     type: Object,
     required: true,
+    default: () => ({
+      id: 0,
+      title: '',
+      messages: [],
+    }),
   }
 })
 
-const sortedMessages = computed(() => {
+const displayedMessages = computed(() => {
   return [...props.chat.messages]
     .sort((a, b) => a.timestamp - b.timestamp)
 })
-
-// Fusion et tri chronologique
-const displayedMessages = ref('')
-displayedMessages.value = sortedMessages.value
-
-console.log(displayedMessages.value);
-
-const chatInput = ref('Qui es-tu ?')
 const loading = ref(false);
+const profil = ref("FF")
+const chatInput = ref('Qui es-tu ?')
 
 const submitChat = async () => {
   // Vérifie s'il y a du texte dans le champ de saisie et si le bot n'est pas déjà en train de répondre
@@ -78,6 +85,7 @@ const submitChat = async () => {
   loading.value = true;
   const content = chatInput.value;
 
+  // Crée un message utilisateur avec un ID unique
   const userMessage = {
     id: Date.now(),
     role: 'user',
@@ -110,10 +118,7 @@ const submitChat = async () => {
   } finally {
     loading.value = false;
   }
-  console.log(Date.now())
 }
-
-const profil = ref("FF")
 </script>
 
 <style scoped lang="sass">

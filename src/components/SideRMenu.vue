@@ -45,14 +45,14 @@
                 @click:append-inner="onClick"
               />
               <v-virtual-scroll
-                :items="userChats"
+                :items="chatsList"
                 height="320"
                 item-height="48"
               >
-                <template #default="{ item }">
+                <template #item="{ chat }">
                   <v-list-item
-                    :key="item.id"
-                    :value="item.id"
+                    :key="chat.id"
+                    :value="chat.id"
                     append-icon="mdi-chevron-right"
                     density="compact"
                   >
@@ -66,11 +66,12 @@
                         icon="mdi-chevron-right"
                         size="x-small"
                         variant="tonal"
-                        @click="$emit('select-chat', item), isOpenOverlay = false"
+                        :to="`/chats/${chat.id}`"
+                        @click="!isOpenOverlay"
                       />
                     </template>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+                    <v-list-item-title>{{ chat.title }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
                   </v-list-item>
                 </template>
               </v-virtual-scroll>
@@ -91,10 +92,10 @@
       nav
     >
       <v-list-item
-        v-for="chat in userChats"
+        v-for="chat in chatsList"
         :key="chat.id"
         :value="chat.id"
-        @click="$emit('select-chat',chat)"
+        :to="`/chats/${chat.id}`"
       >
         <v-list-item-title>{{ chat.title }}</v-list-item-title>
         <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
@@ -110,21 +111,21 @@
     </v-list>
   </v-navigation-drawer>
 </template>
-
 <script setup>
 import {ref} from "vue";
+import {useChatStore} from "@/stores/chatStore.js";
 
 defineProps({
-  userChats: {
-    type: Object,
-    required: true,
-  },
   userData:{
     type: Object,
     required: true,
   }
 });
 const isOpenOverlay = ref(false)
+const chatStore = useChatStore()
+const chatsList = ref(null)
+
+chatsList.value = chatStore.getChatList
 </script>
 
 <style scoped lang="sass">
