@@ -55,6 +55,7 @@ import AiMessage from "@/components/AiMessage.vue";
 // Variables qui donne le temps actuel
 const today = new Date();
 const chatInput = ref('Qui es-tu ?')
+let prompt = ''
 //const botAnswer = ref('')
 
 const currChat = ref('') // contient la liste de la ocnversation en cours avec le bot
@@ -77,21 +78,80 @@ const submitChat = async () => {
     time: getNow(),
     content : content,
   });
+  prompt += "\nUtilisateur te pose cette question  : " + chatInput.value + "\n"
   chatInput.value = '';
 
+  // Utilise le fichier save-message.php pour ajouter le message de l'utilisateur dans la BD
+  // Comme c'est un test je force l'id 1 du chat mais ça sera à change plus tard
+  fetch('http://localhost/api/save-message.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contenu: content,
+      role: 'user',
+      chat_id: 1 // ou ton ID dynamique
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Message enregistré !", data);
+    })
+    .catch(err => {
+      console.error("Erreur d'enregistrement :", err);
+    });
 
-  const response = await ollama.chat({
-    model: 'deepseek-r1:8b',
-    messages: [{ role: 'user', content }],
-  });
-  console.log(response.message.content);
+  // Fait une requête fetch au serveur de l'ia et attends ça réponse
+  // la variable stream true/false pourras servir quand on voudras que le message s'affiche au fur et à mesure.
+  const response = await fetch('http://10.211.120.13:11434/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'mistral',
+      messages: [
+        { role: 'user', content: prompt }
+      ],
+      stream: false
+    })
+  })
+
+  const data = await response.json()
+
+  console.log(data);
   currChat.value.push({
-    role: response.message.role,
+    role: data.message.role,
     author: 'bot',
     time: getNow(),
-    content: response.message.content,
+    content: data.message.content,
   });
   console.log(currChat.value);
+
+  prompt += "Tu as répondu au paragraphe précédent par : " + data.message.content + "\n"
+
+  // Utilise le fichier save-message.php pour ajouter la réponse de l'IA dans la BD
+  // Comme c'est un test je force l'id 1 du chat mais ça sera à change plus tard
+  fetch('http://localhost/api/save-message.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contenu: data.message.content,
+      role: 'assistant',
+      chat_id: 1 // ou ton ID dynamique
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Message enregistré !", data);
+    })
+    .catch(err => {
+      console.error("Erreur d'enregistrement :", err);
+    });
+
 }
 </script>
 
