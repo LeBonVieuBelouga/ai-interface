@@ -19,7 +19,7 @@
           density="compact"
           icon="mdi-magnify"
           style="margin-right: 10px"
-          @click="isOpenOverlay = !isOpenOverlay"
+          @click="isOpenOverlay = true"
         />
         <v-overlay
           v-model="isOpenOverlay"
@@ -35,46 +35,49 @@
           >
             <v-card-text class="pa-4">
               <v-text-field
-                :loading="loading"
+                v-model="search"
                 append-inner-icon="mdi-magnify"
                 density="comfortable"
                 label="Rechercher un chat"
                 variant="solo"
                 hide-details
                 single-line
-                @click:append-inner="onClick"
               />
-              <v-virtual-scroll
-                :items="chatsList"
-                height="320"
-                item-height="48"
+              <v-list
+                v-for="item in filteredChat"
+                class="pa-0"
               >
-                <template #item="{ chat }">
-                  <v-list-item
-                    :key="chat.id"
-                    :value="chat.id"
-                    append-icon="mdi-chevron-right"
-                    density="compact"
-                  >
-                    <template #prepend>
-                      <v-icon dark>
-                        mdi-comment-text-outline
-                      </v-icon>
-                    </template>
-                    <template #append>
-                      <v-btn
-                        icon="mdi-chevron-right"
-                        size="x-small"
-                        variant="tonal"
-                        :to="`/chats/${chat.id}`"
-                        @click="!isOpenOverlay"
-                      />
-                    </template>
-                    <v-list-item-title>{{ chat.title }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ chat.subtitle }}</v-list-item-subtitle>
-                  </v-list-item>
-                </template>
-              </v-virtual-scroll>
+                <v-list-item
+                  :key="item.id"
+                  :value="item.id"
+                  append-icon="mdi-chevron-right"
+                  density="compact"
+                >
+                  <template #prepend>
+                    <v-icon dark>
+                      mdi-comment-text-outline
+                    </v-icon>
+                  </template>
+                  <template #append>
+                    <v-btn
+                      icon="mdi-chevron-right"
+                      size="x-small"
+                      variant="tonal"
+                      :to="`/chats/${item.id}`"
+                      @click="isOpenOverlay = false"
+                    />
+                  </template>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+                </v-list-item>
+                <v-list />
+              </v-list>
+              <p
+                v-if="filteredChat.length <= 0"
+                class="ma-5 text-center"
+              >
+                Aucun chat trouvé.
+              </p>
             </v-card-text>
           </v-card>
         </v-overlay>
@@ -92,7 +95,7 @@
       nav
     >
       <v-list-item
-        v-for="chat in chatsList"
+        v-for="chat in sortedChat"
         :key="chat.id"
         :value="chat.id"
         :to="`/chats/${chat.id}`"
@@ -114,6 +117,7 @@
 <script setup>
 import {ref} from "vue";
 import {useChatStore} from "@/stores/chatStore.js";
+import {computed} from "vue";
 
 defineProps({
   userData:{
@@ -122,10 +126,27 @@ defineProps({
   }
 });
 const isOpenOverlay = ref(false)
-const chatStore = useChatStore()
-const chatsList = ref(null)
+const chatStore = ref(useChatStore())
+console.log(chatStore.value.chats)
 
-chatsList.value = chatStore.getChatList
+const search = ref('')
+
+const sortedChat = computed(() => {
+  return [...chatStore.value.chats].sort((a, b) =>
+    a.updated.localeCompare(b.updated)
+  )
+})
+
+const filteredChat = computed(() => {
+  const query = search.value.toLowerCase().trim()
+  const filtered = sortedChat.value.filter(chat =>
+    chat.title.toLowerCase().includes(query)
+  )
+  console.log(filtered)
+  return filtered
+})
+
+
 </script>
 
 <style scoped lang="sass">
