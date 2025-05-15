@@ -115,9 +115,10 @@
   </v-navigation-drawer>
 </template>
 <script setup>
-import {ref} from "vue";
+import {ref, onMounted} from "vue";
 import {useChatStore} from "@/stores/chatStore.js";
 import {computed} from "vue";
+
 
 defineProps({
   userData:{
@@ -127,6 +128,7 @@ defineProps({
 });
 const isOpenOverlay = ref(false)
 const chatStore = ref(useChatStore())
+
 console.log(chatStore.value.chats)
 
 const search = ref('')

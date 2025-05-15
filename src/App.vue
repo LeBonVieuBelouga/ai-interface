@@ -45,8 +45,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SideRMenu from "@/components/SideRMenu.vue";
+import {useChatStore} from "@/stores/chatStore.js";
 
 const AISelected = ref( "Deep Sick🤒🤖")
 const drawer = ref(true)
@@ -350,7 +351,10 @@ const userConversations = ref([
 ]
 }
 ]);
-const selectChat = (chat) => {
-  currChat.value = chat; // Met à jour le chat sélectionné
-};
+const chatStore = useChatStore()
+
+onMounted(() => {
+  chatStore.loadChatsFromAPI()
+})
+
 </script>
