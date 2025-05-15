@@ -77,6 +77,21 @@ const displayedMessages = computed(() => {
 const loading = ref(false);
 const profil = ref("FF")
 const chatInput = ref('Qui es-tu ?')
+const iaMemoire = computed(() => {
+
+  let memoire = 'Tu es un assistant qui répondre au question d\'un utilisateur. les messages suivi de \'Utilisateur :\' ' +
+    'sont les messages envoyer par l\'utilisateur. Les messages avec \'Assistant :\' sont les messages que tu as répondu.\n'
+
+  for (let message of displayedMessages.value) {
+    if (message.role === 'user') {
+      memoire += 'Utilisateur : ' + message.content
+    } else {
+      memoire += 'Assistant : ' + message.content
+    }
+  }
+
+  return memoire
+})
 
 const submitChat = async () => {
   // Vérifie s'il y a du texte dans le champ de saisie et si le bot n'est pas déjà en train de répondre
@@ -94,30 +109,64 @@ const submitChat = async () => {
     content : content,
   }
   // Ajoute le message de l'utilisateur à la conversation
+  addMessage(content, 'user', props.chat.id)
   displayedMessages.value.push(userMessage);
   chatInput.value = '';
 
   try {
-    const response = await ollama.chat({
-      model: 'deepseek-r1:8b',
-      messages: [{ role: 'user', content }],
-    });
-
-    // Ajout de la réponse de l'IA
-    const aiMessage = {
-      id: Date.now(),
-      role: response.message.role,
-      author: 'bot',
-      timestamp: Date.now(),
-      content: response.message.content,
-    };
-
-    displayedMessages.value.push(aiMessage);
+    askIA(iaMemoire.value, 'mistral')
   } catch (error) {
-    console.error("Erreur avec Ollama:", error);
+    console.error("Erreur avec le serveur IA:", error);
   } finally {
     loading.value = false;
   }
+}
+function addMessage(message, role, idChat) {
+  // Utilise le fichier save-message.php pour ajouter le message de l'utilisateur dans la BD
+  // Comme c'est un test je force l'id 1 du chat mais ça sera à change plus tard
+  fetch('http://localhost/api/save-message.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contenu: message,
+      role: role,
+      chat_id: idChat // ou ton ID dynamique
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Message enregistré !", data);
+    })
+    .catch(err => {
+      console.error("Erreur d'enregistrement :", err);
+    });
+}
+
+function askIA(message, model) {
+
+
+  // Le serveur n'arrive pas à répondre !!! A REPARER 
+  const response = fetch('http://10.211.120.13:11434/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: [
+        { role: 'user', content: message }
+      ],
+      stream: false
+    })
+  })
+
+  const data = response.json()
+
+  addMessage(data.message.content, 'assistant', props.chat.id)
+
+  return response
 }
 </script>
 

@@ -100,12 +100,13 @@ export const useChatStore = defineStore('chat', {
       try {
         const res = await fetch('http://localhost/api/get-chats.php')
         const data = await res.json()
-        console.log("📦 Données chargées depuis l'API :", data)
+        console.log("Données chargées depuis l'API :", data)
         this.chats = data
         localStorage.setItem('chats', JSON.stringify(this.chats)) // si tu veux aussi mettre à jour localStorage
       } catch (err) {
-        console.error("❌ Erreur de chargement des chats :", err)
+        console.error("Erreur de chargement des chats :", err)
       }
     },
+
   },
 })
