@@ -96,7 +96,7 @@ L’interface inclut des **pages d’erreur personnalisées**, par exemple :
 
 Cela permet une expérience utilisateur plus fluide et contrôlée.
 
-![erreur 404](.\docs\img\error404.png)
+![erreur 404](..\docs\img\error404.png)
 
 ## 🗃Base de donnée
 
@@ -104,7 +104,7 @@ Le projet repose sur une base de données **relationnelle** (MySQL) pour assurer
 
 ## MCD
 
-![MCD](.\docs\img\image-20250515145830332.png)
+![MCD](..\docs\img\image-20250515145830332.png)
 
 *le MCD est disponible le dossier `/docs` dans le fichier `C741-ServerAI-MCD.pdf`*
 
