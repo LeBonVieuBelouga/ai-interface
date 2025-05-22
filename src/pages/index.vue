@@ -31,53 +31,33 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useChatStore } from "@/stores/chatStore.js"
+import { useRouter } from 'vue-router'
 
-// Props si tu en as besoin, sinon retire-les
-// import { defineProps } from 'vue'
-// const props = defineProps({ ... })
+const router = useRouter()
 
-// Variables réactives
+const chatStore = useChatStore()
 const chatInput = ref('')
 const loading = ref(false)
 
-// La fonction appelée quand on clique sur l'icône "envoyer"
 const submitChat = async () => {
   if (!chatInput.value.trim() || loading.value) return
 
   loading.value = true
   const message = chatInput.value.trim()
-
-  const chatId = addChat(message, 1);
+  const chatId = await chatStore.addChat(message, 1)
 
   if (chatId > 0) {
-
+    await chatStore.addMessage(message,"user", chatId)
+    await chatStore.askAI(message, chatId)
+    await router.push("/chats/" + chatId)
   }
 
-  // Simule un envoi vers l'IA
   setTimeout(() => {
     loading.value = false
     chatInput.value = ''
   }, 1000)
-}
-
-async function addChat(message, idUtilisateur) {
-  await fetch("http://localhost/api/add-chat.php", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      titre: message,
-      utilisateur_id: idUtilisateur
-    })
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Chat ajouté avec l'ID :", data.chat_id)
-      return data.chat_id
-    })
-
 }
 </script>
 

@@ -56,6 +56,7 @@
 import { computed ,ref } from 'vue';
 import AiMessage from "@/components/AiMessage.vue";
 import UserMessage from "@/components/UserMessage.vue";
+import {useChatStore} from "@/stores/chatStore.js";
 
 const props = defineProps({
   chat: {
@@ -68,7 +69,7 @@ const props = defineProps({
     }),
   }
 })
-
+const chatStore = useChatStore()
 const displayedMessages = computed(() => {
   return [...props.chat.messages]
     .sort((a, b) => a.timestamp - b.timestamp)
@@ -93,59 +94,28 @@ const iaMemoire = computed(() => {
 })
 
 const submitChat = async () => {
-  // Vérifie s'il y a du texte dans le champ de saisie et si le bot n'est pas déjà en train de répondre
   if (!chatInput.value.trim() || loading.value) return;
 
   loading.value = true;
   const content = chatInput.value;
 
-  // Crée un message utilisateur avec un ID unique
-  const userMessage = {
-    id: Date.now(),
-    role: 'user',
-    author: 'Gregory',
-    timestamp: Date.now(),
-    content : content,
-  }
-  // Ajoute le message de l'utilisateur à la conversation
-  addMessage(content, 'user', props.chat.id)
-  displayedMessages.value.push(userMessage);
-  chatInput.value = '';
-
   try {
-    //askIA(iaMemoire.value, 'mistral');
-    const response = await fetch('http://10.211.120.27:11434/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'mistral',
-        messages: [
-          { role: 'user', content: iaMemoire.value }
-        ],
-        stream: false
-      })
-    })
+    // On attend que le message user soit bien enregistré avant de vider l'input
+    await chatStore.addMessage(content, "user", props.chat.id);
+    chatInput.value = '';
 
-    const data = await response.json()
+    // Ensuite on appelle l'IA (je suppose que ta fonction askAI ou askIA est aussi async)
+    await chatStore.askAI(iaMemoire.value, props.chat.id);
 
-    addMessage(data.message.content, 'assistant', props.chat.id)
-
-    displayedMessages.value.push({
-      id: 0, // ou une autre logique d'ID
-      role: 'assistant',
-      author: 'mistral',
-      timestamp: Date.now(), // ou null si tu veux laisser vide
-      content: data.message.content
-    });
+    // Ici tu peux mettre à jour l'affichage ou autre chose si besoin
 
   } catch (error) {
-    console.error("Erreur avec le serveur IA:", error);
+    console.error("Erreur avec le serveur IA ou l'enregistrement :", error);
   } finally {
     loading.value = false;
   }
 }
+
 function addMessage(message, role, idChat) {
   // Utilise le fichier save-message.php pour ajouter le message de l'utilisateur dans la BD
   // Comme c'est un test je force l'id 1 du chat mais ça sera à change plus tard

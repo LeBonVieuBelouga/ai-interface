@@ -6,95 +6,21 @@
  * @since 2025-01-31
  */
 import { defineStore } from 'pinia'
-/**
- * Liste des chats et des messages qu'ils les composent
- * Chaque chat est un objet contenant un identifiant, un nom et une liste de messages
- * @type {Array} defaultChat
- */
-const defaultChats = [
-  {
-    id:'1',
-    title: 'Demo communication avec l’IA',
-    subtitle: ' Rendu déclaratif et liaisons d’attributs',
-    prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
-    to: '/communication-demo',
-    created: '2025-03-04', // Date de création
-    updated: '2025-03-04', // Date de mise à jour
-    messages :[
-      {
-        id: '1',
-        role: 'user',
-        author: 'Seb',
-        timestamp: 1744027796058,
-        content: 'Aide-moi pitié'
-      },
-      {
-        id: '2',
-        role: 'assistant',
-        author: 'DeepSeek-r1',
-        timestamp: 1744027796059,
-        content: 'Non...'
-      }
-    ]
-  },
-  {
-    id:'2',
-    title: 'Comment discuter ?',
-    subtitle: 'Rendu déclaratif et liaisons d’attributs',
-    prependIcon: 'mdi-pencil-outline', // Icône pertinente pour l'exercice
-    to: '/',
-    created: '2023-10-01', // Date de création
-    updated: '2023-10-05', // Date de mise à jour
-    messages :[
-      {
-        id: '0001',
-        role: 'user',
-        author: 'Seb',
-        timestamp: 1744027796058,
-        content: 'Aide-moi pitié'
-      },
-      {
-        id: '0002',
-        role: 'assistant',
-        author: 'DeepSeek-r1',
-        timestamp: 1744027796059,
-        content: 'Non...'
-      }
-    ]
-  }
-]
 
-/**
- * Gestionnaire de l'état des chats
- * @type {Array<'chats', {chats, user: null}, {getChatList: (function(*): *), getChatById: (function(*): function(*): *)}, {deleteChat(string): void, addChat(Object): void}>}
- */
 export const useChatStore = defineStore('chat', {
-  // État initial du magasin.
   state: () => ({
-    // On charge la liste de pokémons depuis le localStorage si elle existe, sinon on utilise la liste par défaut.
     chats: [],
   }),
 
-  // Getters pour accéder aux données du magasin.
   getters: {
-    /**
-     * Récupère la liste des chats.
-     * @returns {Array} Liste des chats.
-     */
-    getChatList: state => {
-      return state.chats
-    },
-    /**
-     * Récupère un chat spécifique par son identifiant.
-     * @param {string} id - Identifiant du chat.
-     * @returns {Object|null} Chat correspondant à l'identifiant ou null s'il n'existe pas.
-     */
+    getChatList: state => state.chats,
+
     getChatById: state => id => {
-      // Convertit l'ID recherché et les IDs des chats en Number pour la comparaison
       const searchId = Number(id)
       return state.chats.find(chat => Number(chat.id) === searchId)
     },
   },
+
   actions: {
     async loadChatsFromAPI() {
       try {
@@ -102,11 +28,116 @@ export const useChatStore = defineStore('chat', {
         const data = await res.json()
         console.log("Données chargées depuis l'API :", data)
         this.chats = data
-        localStorage.setItem('chats', JSON.stringify(this.chats)) // si tu veux aussi mettre à jour localStorage
+        localStorage.setItem('chats', JSON.stringify(this.chats))
       } catch (err) {
         console.error("Erreur de chargement des chats :", err)
       }
     },
 
-  },
+    async addMessage(message, role, idChat) {
+      try {
+        const response = await fetch('http://localhost/api/save-message.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            contenu: message,
+            role: role,
+            chat_id: idChat
+          })
+        })
+
+        const data = await response.json()
+        console.log("Message enregistré !", data)
+
+        const chat = this.chats.find(chat => Number(chat.id) === Number(idChat))
+        if (chat) {
+          chat.messages.push({
+            id: Date.now(), // ou data.id si l'API le renvoie
+            content: message,
+            role: role,
+            author: role === 'user' ? 'Moi' : 'IA',
+            timestamp: Date.now()
+          })
+        }
+
+      } catch (err) {
+        console.error("Erreur d'enregistrement :", err)
+      }
+    },
+
+    /**
+     * Envoie une requête au serveur IA (Ollama) et ajoute la réponse dans le chat.
+     * @param {string} iaMemoire - Le contenu de la discussion à envoyer à l'IA.
+     * @param {number|string} chatId - L'ID du chat auquel la réponse doit être ajoutée.
+     */
+    async askAI(iaMemoire, chatId) {
+      try {
+        const response = await fetch('http://10.211.120.27:11434/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'mistral',
+            messages: [
+              { role: 'user', content: iaMemoire }
+            ],
+            stream: false
+          })
+        })
+
+        const data = await response.json()
+        console.log("Réponse IA :", data)
+
+        if (data?.message?.content) {
+          await this.addMessage(data.message.content, 'assistant', chatId)
+        }
+
+      } catch (err) {
+        console.error("Erreur lors de la requête IA :", err)
+      }
+    },
+
+    /**
+     * Ajoute un nouveau chat via l'API et le stocke localement
+     * @param {string} titre - Le titre du chat
+     * @param {number} idUtilisateur - L'ID de l'utilisateur créant le chat
+     * @returns {Promise<number>} L'ID du chat créé
+     */
+    async addChat(titre, idUtilisateur) {
+      try {
+        const response = await fetch("http://localhost/api/add-chat.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            titre: titre,
+            utilisateur_id: idUtilisateur
+          }),
+        });
+
+        const data = await response.json();
+        console.log("Chat ajouté avec l'ID :", data.chat_id);
+
+        const newChat = {
+          id: data.chat_id.toString(),
+          title: titre,
+          subtitle: "",
+          prependIcon: "mdi-pencil-outline",
+          to: "/",
+          created: new Date().toISOString().slice(0, 19).replace("T", " "),
+          updated: new Date().toISOString().slice(0, 19).replace("T", " "),
+          messages: []
+        };
+
+        this.chats.push(newChat);
+
+        return data.chat_id;
+      } catch (error) {
+        console.error("Erreur lors de l'ajout du chat :", error);
+        throw error;
+      }
+    }
+  }
 })
