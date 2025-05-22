@@ -54,7 +54,6 @@
 </template>
 <script setup>
 import { computed ,ref } from 'vue';
-import ollama from "ollama";
 import AiMessage from "@/components/AiMessage.vue";
 import UserMessage from "@/components/UserMessage.vue";
 
@@ -114,7 +113,33 @@ const submitChat = async () => {
   chatInput.value = '';
 
   try {
-    askIA(iaMemoire.value, 'mistral')
+    //askIA(iaMemoire.value, 'mistral');
+    const response = await fetch('http://10.211.120.27:11434/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'mistral',
+        messages: [
+          { role: 'user', content: iaMemoire.value }
+        ],
+        stream: false
+      })
+    })
+
+    const data = await response.json()
+
+    addMessage(data.message.content, 'assistant', props.chat.id)
+
+    displayedMessages.value.push({
+      id: 0, // ou une autre logique d'ID
+      role: 'assistant',
+      author: 'mistral',
+      timestamp: Date.now(), // ou null si tu veux laisser vide
+      content: data.message.content
+    });
+
   } catch (error) {
     console.error("Erreur avec le serveur IA:", error);
   } finally {
@@ -147,8 +172,8 @@ function addMessage(message, role, idChat) {
 function askIA(message, model) {
 
 
-  // Le serveur n'arrive pas à répondre !!! A REPARER 
-  const response = fetch('http://10.211.120.13:11434/api/chat', {
+  // Le serveur n'arrive pas à répondre !!! A REPARER
+  const response = fetch('http://10.211.120.27:11434/api/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
