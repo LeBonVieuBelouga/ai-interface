@@ -3,6 +3,7 @@
     <h1 class="text-center ma-5">
       Comment puis-je vous aider ?
     </h1>
+
     <v-card
       class="mx-auto"
       color="surface-light"
@@ -11,9 +12,9 @@
     >
       <v-card-text>
         <v-textarea
-          :loading="loading"
+          v-model="chatInput"
           height="80"
-          append-inner-icon="mdi-magnify"
+          append-inner-icon="mdi-send"
           density="compact"
           variant="solo"
           hide-details
@@ -21,40 +22,72 @@
           rows="1"
           no-resize
           clearable
-          @click:append-inner="onClick"
+          :loading="loading"
+          @click:append-inner="submitChat"
         />
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      loading: false, // Exemple de gestion de l'état de chargement
-    };
-  },
-  methods: {
-    onClick() {
-      // Exemple de gestion du clic sur l'icône
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
+<script setup>
+import { ref, computed } from 'vue'
+
+// Props si tu en as besoin, sinon retire-les
+// import { defineProps } from 'vue'
+// const props = defineProps({ ... })
+
+// Variables réactives
+const chatInput = ref('')
+const loading = ref(false)
+
+// La fonction appelée quand on clique sur l'icône "envoyer"
+const submitChat = async () => {
+  if (!chatInput.value.trim() || loading.value) return
+
+  loading.value = true
+  const message = chatInput.value.trim()
+
+  const chatId = addChat(message, 1);
+
+  if (chatId > 0) {
+
+  }
+
+  // Simule un envoi vers l'IA
+  setTimeout(() => {
+    loading.value = false
+    chatInput.value = ''
+  }, 1000)
+}
+
+async function addChat(message, idUtilisateur) {
+  await fetch("http://localhost/api/add-chat.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
     },
-  },
-};
+    body: JSON.stringify({
+      titre: message,
+      utilisateur_id: idUtilisateur
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Chat ajouté avec l'ID :", data.chat_id)
+      return data.chat_id
+    })
+
+}
 </script>
 
 <style scoped>
-/* Ajoutez un style personnalisé si nécessaire */
 .v-textarea {
-  overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
-  max-height: 200px; /* Limite la hauteur maximale */
+  overflow-y: auto;
+  max-height: 200px;
   border-radius: 20px;
 }
-.v-card-text{
+.v-card-text {
   border-radius: 20px;
 }
 </style>
