@@ -132,8 +132,8 @@ Dans le dossier `docs` une démo technique est disponible, celle-ci présente l'
 
 * **vidéo de présentation :** `interface-demo_22_05_25.mp4`
 
-  <video src=".\docs\interface-demo_22_05_25.mp4"></video>
-
+ <video src="https://github.com/LeBonVieuBelouga/ai-interface/blob/docs/init/docs/interface-demo_22_05_25.mp4"></video>
+ 
 ------
 
 ### 🍍 Gestion des données avec Pinia
