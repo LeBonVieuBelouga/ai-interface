@@ -1,7 +1,7 @@
 # AI interface 
 **Auteur**: Léo Küttel & Johan Jacquet  
 **Date de création**: 15 Mai 2025  
-**Dernière mise à jour**: 22 Mai 2025  
+**Dernière mise à jour**: 23 Mai 2025  
 
 ---
 
@@ -122,11 +122,17 @@ L’interface web transmet le résultat final à l’utilisateur, que ce soit :
 
 L’interface du projet est développée en **Vue.js**, avec les technologies suivantes pour la gestion de l’état, de l’apparence et du routage :
 
-### 🔩 Technologies principales
-
 - **Vue.js** : Framework JavaScript progressif pour la création d’interfaces web réactives.
 - **Vuetify** : Librairie de composants UI basée sur Material Design, utilisée pour la cohérence visuelle et l’ergonomie.
 - **Pinia** : Système de gestion d’état moderne, léger et intégré à Vue 3, utilisé pour centraliser et synchroniser les données de l’application (chats, messages, utilisateur actif, modèles IA, etc.).
+
+### 🎥 Démonstration 
+
+Dans le dossier `docs` une démo technique est disponible, celle-ci présente l'interface côté client avec la création de discussion et l'envoie et l'enregistrement de message entre la DB et le serveur Ollama.
+
+* **vidéo de présentation :** `interface-demo_22_05_25.mp4`
+
+  <video src=".\docs\interface-demo_22_05_25.mp4"></video>
 
 ------
 
@@ -164,6 +170,82 @@ Cela permet une expérience utilisateur plus fluide et contrôlée.
 
 ----
 
+## ⚙️ Installation du Serveur
+
+### 🖥️ Création de la VM et installation de l'OS
+
+1. Télécharger l’image Ubuntu Server 24.04 :
+    👉 https://ubuntu.com/download/alternative-downloads
+2. Installer l'OS avec les paramètres suivants :
+   - **Nom d'utilisateur :** `administrateur`
+   - **Mot de passe :** `[VOTRE_MOT_DE_PASSE]`
+
+------
+
+### 🔧 Configuration du serveur
+
+#### Mise à jour du système et installation des paquets de base :
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl git unzip wget
+sudo apt install -y net-tools
+```
+
+### 🦙 Installation d’Ollama
+
+1. Installer Ollama :
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+2. Vérifier la version :
+
+```
+ollama --version
+```
+
+3. Lancer un modèle (exemple avec `mistral`) :
+
+```
+ollama run mistral
+```
+
+### 🌐 Vérification du serveur API Ollama
+
+#### Vérifier si Ollama écoute sur le bon port :
+
+```
+netstat -tulnp | grep 11434
+```
+
+- Si **IP = `0.0.0.0:11434`** : ✅ accessible depuis l’extérieur (OK)
+- Si **IP = `127.0.0.1:11434`** : ❌ seulement accessible en local → **changer la configuration** :
+
+#### Reconfigurer Ollama pour qu’il écoute à l’extérieur :
+
+1. Arrêter le service :
+
+```bash
+sudo systemctl stop ollama
+```
+
+2. Lancer Ollama manuellement avec écoute externe :
+
+```bash
+OLLAMA_HOST=0.0.0.0 ollama serve &
+```
+
+(Facultatif) Si le processus ne se termine pas après l'arrêt :
+
+```bash
+pidof ollama
+kill -9 <PID>
+```
+
+> 💡 Pour accéder à votre serveur via le réseau local, redémarrez votre VM en mode **Bridge** (dans VMware).
+
 ## 🗃 Base de donnée
 
 Le projet repose sur une base de données **relationnelle** (MySQL) pour assurer la persistance des chats, messages, utilisateurs et modèles d’IA. Voici une description des principales tables et de leurs relations, basée sur le schéma ci-dessus :
@@ -172,7 +254,8 @@ Le projet repose sur une base de données **relationnelle** (MySQL) pour assurer
 
 ![MCD](..\docs\img\image-20250515145830332.png)
 
-*le MCD est disponible le dossier `/docs` dans le fichier `C741-ServerAI-MCD.pdf`*
+> 💡 Le MCD est disponible le dossier `/docs` dans le fichier `C741-ServerAI-MCD.pdf`
+>
 
 #### 📥 Exemple de réponse IA stockée (JSON)
 
@@ -207,6 +290,7 @@ Lorsqu’un message est généré par une IA, une partie de la réponse peut êt
 - Icone vuetifly : https://pictogrammers.com/library/mdi/
 - Formation Vue.JS : https://www.w3schools.com
 - Modèle de dépot git en DevOps : https://devtks.github.io/2019-08-09-GitFlowAzureDevops/
+- Accès réseau (VMware Bridge) : https://www.youtube.com/watch?v=Y-_SO9nC0Ps
 
 ### 🖌 Inspiration de l'interface
 
