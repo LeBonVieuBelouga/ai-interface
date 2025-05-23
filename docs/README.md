@@ -54,7 +54,7 @@ Voici les principales pistes d'amélioration actuellement prévues :
 
 ## 🔄 Étapes de communication entre les composants du service
 
-![image-20250522150407215](.\img\SchemaLogique.png)
+![Schéma logique de la structure du projet]( https://github.com/LeBonVieuBelouga/ai-interface/blob/docs/init/docs/img/SchemaLogique.png)
 
 #### 1. **Connexion client → interface web (SRV-Web)**
 
@@ -166,7 +166,7 @@ L’interface inclut des **pages d’erreur personnalisées**, par exemple :
 
 Cela permet une expérience utilisateur plus fluide et contrôlée.
 
-![erreur 404](..\docs\img\error404.png)
+![erreur 404](https://github.com/LeBonVieuBelouga/ai-interface/blob/docs/init/docs/img/error404.png)
 
 ----
 
@@ -252,7 +252,7 @@ Le projet repose sur une base de données **relationnelle** (MySQL) pour assurer
 
 ## 🛀 MCD
 
-![MCD](..\docs\img\image-20250515145830332.png)
+![MCD](https://github.com/LeBonVieuBelouga/ai-interface/blob/docs/init/docs/img/image-20250515145830332.png)
 
 > 💡 Le MCD est disponible le dossier `/docs` dans le fichier `C741-ServerAI-MCD.pdf`
 >
